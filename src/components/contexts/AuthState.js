@@ -1,17 +1,17 @@
 /* eslint-disable no-unused-vars */
 
-import React from "react";
+import React, { useState } from "react";
 import AuthContext from "./AuthContext";
 const AuthState = (props) => {
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [LoggedIn, setLoggedIn] = useState(false);
   React.useEffect(() => {
     if (localStorage.getItem("Auth")) {
-      setIsLoggedIn(true);
+      setLoggedIn(true);
     }
-  }, []);
+  }, [LoggedIn]);
 
   return (
-    <AuthContext.Provider value={isLoggedIn}>
+    <AuthContext.Provider value={{ LoggedIn, setLoggedIn }}>
       {props.children}
     </AuthContext.Provider>
   );
