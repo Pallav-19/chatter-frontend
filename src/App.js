@@ -2,20 +2,15 @@
 import React from "react";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./components/Home.js";
-import AuthState from "../src/components/contexts/AuthState";
+import Home from "./components/Home/Home.js";
 
 function App() {
   return (
-    <AuthState>
       <div className="App">
-        <Router>
-          <Routes>
-            <Route exact index path="/" element={<Home />}></Route>
-          </Routes>
-        </Router>
+        <Routes>
+          <Route exact index path="/" element={<Home />}></Route>
+        </Routes>
       </div>
-    </AuthState>
   );
 }
 

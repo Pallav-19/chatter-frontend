@@ -3,8 +3,10 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import { extendTheme, ChakraProvider } from "@chakra-ui/react";
-
+import { BrowserRouter as Router } from "react-router-dom";
+import AuthState from "./components/contexts/Auth/AuthState";
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
 const colors = {
   brand: {
     900: "#1a365d",
@@ -16,9 +18,13 @@ const theme = extendTheme({ colors });
 
 root.render(
   <React.StrictMode>
-    <ChakraProvider theme={theme}>
-      <App />
-    </ChakraProvider>
+    <Router>
+      <AuthState>
+        <ChakraProvider theme={theme}>
+          <App />
+        </ChakraProvider>
+      </AuthState>
+    </Router>
   </React.StrictMode>
 );
 

@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import axios from "axios";
+import AuthContext from "../contexts/Auth/AuthContext";
 import {
   FormControl,
   FormLabel,
-  FormHelperText,
   InputGroup,
   Button,
   InputRightElement,
@@ -12,10 +12,19 @@ import {
 } from "@chakra-ui/react";
 import { Input } from "@chakra-ui/react";
 import { Stack } from "@chakra-ui/react";
-import validator from "validator";
 import { useNavigate } from "react-router-dom";
+import validator from "validator";
 import "./Login.css";
+function parseJwt(token) {
+  if (!token) {
+    return;
+  }
+  const base64Url = token.split(".")[1];
+  const base64 = base64Url.replace("-", "+").replace("_", "/");
+  return JSON.parse(window.atob(base64));
+}
 const Login = () => {
+  const { setUser, user } = React.useContext(AuthContext);
   const navigate = useNavigate("/chat");
   const toast = useToast();
   const [email, setEmail] = React.useState("");
@@ -67,7 +76,10 @@ const Login = () => {
         setEmail("");
         setPassword("");
         localStorage.setItem("Auth", await response.data.token);
-        navigate("/chat");
+        const user = parseJwt(await response.data.token);
+        setUser(await user);
+        console.log(await user);
+
       }
     }
   };
@@ -84,7 +96,6 @@ const Login = () => {
             }}
             type="email"
           />
-          <FormHelperText>We'll never share your email.</FormHelperText>
           <FormLabel>Password</FormLabel>
           <InputGroup>
             <Input

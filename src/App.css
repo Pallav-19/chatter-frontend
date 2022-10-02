@@ -1,12 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&family=JetBrains+Mono:wght@100;400;600&family=Poppins:wght@300&family=Roboto+Mono:wght@100;300;400&family=Roboto:wght@300&family=Rubik:wght@700&family=Ubuntu:wght@300&display=swap");
 .App {
   display: flex;
-  /* min-height: 100vh; */
   width: 100vw;
+  height: 100vh;
 }
 body {
-  height: 100vh;
+  /* height: 100vh; */
   font-family: "Ubuntu", sans-serif;
 
-  width: 100vw;
+  /* width: 100vw; */
 }
