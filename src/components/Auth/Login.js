@@ -9,20 +9,14 @@ import {
   Button,
   InputRightElement,
   useToast,
+  Input,
+  Stack,
 } from "@chakra-ui/react";
-import { Input } from "@chakra-ui/react";
-import { Stack } from "@chakra-ui/react";
+
 import { useNavigate } from "react-router-dom";
 import validator from "validator";
 import "./Login.css";
-function parseJwt(token) {
-  if (!token) {
-    return;
-  }
-  const base64Url = token.split(".")[1];
-  const base64 = base64Url.replace("-", "+").replace("_", "/");
-  return JSON.parse(window.atob(base64));
-}
+
 const Login = () => {
   const { setUser, user } = React.useContext(AuthContext);
   const navigate = useNavigate("/chat");
@@ -76,10 +70,7 @@ const Login = () => {
         setEmail("");
         setPassword("");
         localStorage.setItem("Auth", await response.data.token);
-        const user = parseJwt(await response.data.token);
-        setUser(await user);
-        console.log(await user);
-
+        navigate("/");
       }
     }
   };
@@ -120,7 +111,7 @@ const Login = () => {
             onClick={handleSubmit}
             width={"100%"}
             mt={"2rem"}
-            colorScheme="teal"
+            colorScheme="blue"
             variant="solid"
           >
             Login

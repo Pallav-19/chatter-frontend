@@ -176,7 +176,7 @@ const Signup = () => {
             onClick={submitHandler}
             width={"100%"}
             mt={"2rem"}
-            colorScheme="teal"
+            colorScheme="blue"
             variant="solid"
           >
             Signup

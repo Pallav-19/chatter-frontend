@@ -6,3 +6,10 @@
   padding: 0.4rem 0.7rem;
   border-width: 0.3rem;
 }
+.menuicons {
+  margin-right: 0.5rem;
+}
+.searchBox {
+  display: flex;
+  flex-direction: row;
+}

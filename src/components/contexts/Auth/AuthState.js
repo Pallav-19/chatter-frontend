@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import AuthContext from "./AuthContext";
 import { useLocation } from "react-router-dom";
-
+import parseJwt from "../../../utils/parseJson";
 const AuthState = (props) => {
   const location = useLocation();
   const [LoggedIn, setLoggedIn] = useState(false);
@@ -11,6 +11,10 @@ const AuthState = (props) => {
   React.useEffect(() => {
     if (localStorage.getItem("Auth")) {
       setLoggedIn(true);
+      setUser(parseJwt(localStorage.getItem("Auth")));
+    } else {
+      setUser("");
+      setLoggedIn(false);
     }
   }, [location]);
 
