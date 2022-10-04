@@ -4,10 +4,10 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import Login from "../Auth/Login";
 import Signup from "../Auth/Signup";
 import "./Home.css";
-import AuthContext from "../contexts/Auth/AuthContext";
+import ChatContext from "../contexts/chats/ChatContext";
 import Chat from "../chat/Chat";
 const Home = () => {
-  const context = useContext(AuthContext);
+  const context = useContext(ChatContext);
   const { LoggedIn, setLoggedIn } = context;
   return (
     <div className="Home">

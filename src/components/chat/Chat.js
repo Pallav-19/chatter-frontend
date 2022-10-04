@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
 import React, { useContext } from "react";
-import AuthContext from "../contexts/Auth/AuthContext";
+import ChatContext from "../contexts/chats/ChatContext";
 import SideDrawer from "../miscellaneous/SideDrawer";
 import MyChats from "../chat/MyChats";
 import ChatBox from "../chat/ChatBox";
 import "./Chat.css"
 const Chat = () => {
-  const { LoggedIn, setLoggedIn } = useContext(AuthContext);
+  const { LoggedIn, setLoggedIn } = useContext(ChatContext);
   return (
     <div className="Chat">
       {LoggedIn && <SideDrawer />}

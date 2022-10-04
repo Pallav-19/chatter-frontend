@@ -4,7 +4,9 @@ const UserList = ({ user, accessChat }) => {
   return (
     <div>
       <Box
-        onClick={accessChat(user._id)}
+        onClick={() => {
+          accessChat(user._id);
+        }}
         display={"flex"}
         cursor="pointer"
         bg={"#e8e8e8"}

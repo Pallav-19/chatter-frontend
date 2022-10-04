@@ -23,21 +23,22 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
-import AuthContext from "../contexts/Auth/AuthContext";
+import ChatContext from "../contexts/chats/ChatContext";
 import ProfileModal from "./ProfileModal.js";
 import SkeletonComponent from "./SkeletonComponent.js";
-import ChatContext from "../contexts/chats/ChatContext";
 import "./SideDrawer.css";
 import UserList from "../Avatar/UserList";
 const SideDrawer = () => {
-  const { user } = React.useContext(AuthContext);
-  const { selectedChat, setSelectedChat } = React.useContext(ChatContext);
+  const { user } = React.useContext(ChatContext);
+  const { selectedChat, setSelectedChat, chats, setChats } =
+    React.useContext(ChatContext);
   const navigate = useNavigate();
 
   const [search, setSearch] = React.useState();
   const [searchResults, setSearchResults] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [loadingChat, setLoadingChat] = React.useState(false);
+  const [text, setText] = React.useState("  ");
   const { onOpen, isOpen, onClose } = useDisclosure();
   const toast = useToast();
   const logout = () => {
@@ -56,18 +57,30 @@ const SideDrawer = () => {
     }
     try {
       setLoading(true);
-      const { data } = await axios.get(
-        `http://localhost:5100/api/user/allUsers?search=${search}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            authorisation: localStorage.getItem("Auth"),
-          },
-        }
-      );
-      setSearchResults(await data.users);
-      setLoading(false);
+      setText(" ");
+
+      const { data } = await axios.get(`/api/user/allUsers?search=${search}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          authorisation: localStorage.getItem("Auth"),
+        },
+      });
+      if (data.success && data.users.length > 0) {
+        setText(" ");
+        setSearchResults(await data.users);
+        setLoading(false);
+      } else {
+        toast({
+          title: await data.message,
+          status: (await data.success) ? "success" : "error",
+          duration: 5000,
+          isClosable: true,
+          position: "top-right",
+        });
+        setLoading(false);
+        setText("Couldn't Search !");
+      }
     } catch (err) {
       return toast({
         title: err.message,
@@ -92,9 +105,11 @@ const SideDrawer = () => {
           },
         }
       );
-      setSelectedChat(await data.response);
+      if (!chats.find(async (c) => c._id === (await data.chat._id))) {
+        setChats([await data.chat, ...chats]);
+      }
+      setSelectedChat(await data.chat);
       setLoadingChat(false);
-      onClose();
     } catch (err) {
       return toast({
         title: err.message,
@@ -104,6 +119,8 @@ const SideDrawer = () => {
         position: "top-right",
       });
     }
+    onClose();
+    navigate("/");
   };
   return (
     <div className="sideDrawer">
@@ -112,24 +129,33 @@ const SideDrawer = () => {
           <i className="fa-solid fa-magnifying-glass"></i>
         </Button>
       </Tooltip>
-      <Text fontSize={"2xl"} fontFamily={"ubuntu,sans"}>
+      <Text fontSize={{ base: "md", md: "2xl" }} fontFamily={"ubuntu,sans"}>
         Chatter
       </Text>
       <div>
         <Menu>
-          <MenuButton mx={"2"} as={Button}>
+          <MenuButton size={{ base: "sm", md: "md" }} mx={"2"} as={Button}>
             <BellIcon fontSize={"2xl"} margin="1"></BellIcon>
           </MenuButton>
           <MenuList></MenuList>
         </Menu>
         <Menu>
-          <MenuButton mx={"2"} as={Button} rightIcon={<ChevronDownIcon />}>
-            <Avatar size="sm" cursor={"pointer"} name={user?.name}></Avatar>
+          <MenuButton
+            size={{ base: "sm", md: "md" }}
+            mx={"2"}
+            as={Button}
+            rightIcon={<ChevronDownIcon />}
+          >
+            <Avatar
+              size={{ base: "xs", md: "sm" }}
+              cursor={"pointer"}
+              name={user?.name}
+            ></Avatar>
           </MenuButton>
           <MenuList>
             <ProfileModal user={user}>
               <MenuItem>
-                <i class="fa-solid fa-user menuicons"></i>My Profile
+                <i  className="fa-solid fa-user menuicons"></i>My Profile
               </MenuItem>
             </ProfileModal>
 
@@ -139,7 +165,7 @@ const SideDrawer = () => {
                 logout();
               }}
             >
-              <i class="fa-solid fa-right-from-bracket menuicons"></i>Logout
+              <i  className="fa-solid fa-right-from-bracket menuicons"></i>Logout
             </MenuItem>
           </MenuList>
         </Menu>
@@ -170,11 +196,12 @@ const SideDrawer = () => {
             </div>
             {loading ? (
               <SkeletonComponent />
-            ) : (
+            ) : searchResults.length > 0 ? (
               searchResults.map((searchResult) => {
                 return <UserList user={searchResult} accessChat={accessChat} />;
               })
-              // <span>results</span>
+            ) : (
+              <span>{text}</span>
             )}
           </DrawerBody>
         </DrawerContent>

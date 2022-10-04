@@ -4,7 +4,6 @@ import "./index.css";
 import App from "./App";
 import { extendTheme, ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter as Router } from "react-router-dom";
-import AuthState from "./components/contexts/Auth/AuthState";
 import ChatState from "./components/contexts/chats/ChatState";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -20,13 +19,11 @@ const theme = extendTheme({ colors });
 root.render(
   <React.StrictMode>
     <Router>
-      <AuthState>
-        <ChatState>
-          <ChakraProvider theme={theme}>
-            <App />
-          </ChakraProvider>
-        </ChatState>
-      </AuthState>
+      <ChatState>
+        <ChakraProvider theme={theme}>
+          <App />
+        </ChakraProvider>
+      </ChatState>
     </Router>
   </React.StrictMode>
 );

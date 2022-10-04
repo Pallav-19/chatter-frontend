@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import axios from "axios";
-import AuthContext from "../contexts/Auth/AuthContext";
+import ChatContext from "../contexts/chats/ChatContext";
 import {
   FormControl,
   FormLabel,
@@ -18,7 +18,7 @@ import validator from "validator";
 import "./Login.css";
 
 const Login = () => {
-  const { setUser, user } = React.useContext(AuthContext);
+  const { setUser, user } = React.useContext(ChatContext);
   const navigate = useNavigate("/chat");
   const toast = useToast();
   const [email, setEmail] = React.useState("");
