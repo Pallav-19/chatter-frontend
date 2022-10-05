@@ -2,10 +2,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React from "react";
-import { Box, Button, useToast, Text, Stack } from "@chakra-ui/react";
+import { Box, Button, useToast, Text, Stack, Spinner } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import ChatContext from "../contexts/chats/ChatContext";
 import axios from "axios";
+import { Navigate, useLocation } from "react-router-dom";
+import CreateGroupModal from "../miscellaneous/CreateGroupModal";
+
 const MyChats = () => {
   const [loading, setLoading] = React.useState(false);
   const { selectedChat, setSelectedChat, chats, setChats } =
@@ -34,7 +37,9 @@ const MyChats = () => {
         isClosable: true,
         position: "top-right",
       });
+      setLoading(false);
     }
+    Navigate("/");
   };
   const getSender = (user, users) => {
     return users[0]._id === user.userId ? users[1].name : users[0].name;
@@ -42,7 +47,7 @@ const MyChats = () => {
   React.useEffect(() => {
     fetchChats();
     console.log(chats);
-  }, []);
+  }, [useLocation()]);
   return (
     <Box
       display={{ base: selectedChat ? "none" : "flex", md: "flex" }}
@@ -69,54 +74,81 @@ const MyChats = () => {
         <Text fontSize={"1.55rem"} fontFamily={"ubuntu, sans"}>
           My Chats
         </Text>
-        <Button
-          fontFamily={"ubuntu, sans"}
+        <CreateGroupModal>
+          <Button
+            fontFamily={"ubuntu, sans"}
+            display={"flex"}
+            fontSize="1rem"
+            rightIcon={<AddIcon />}
+          >
+            New Group
+          </Button>
+        </CreateGroupModal>
+      </Box>
+      {!loading ? (
+        <Box
           display={"flex"}
-          fontSize="1rem"
-          rightIcon={<AddIcon />}
+          flexDir={"column"}
+          p={3}
+          bg="#f8f8f8"
+          width={"100%"}
+          height={"100%"}
+          overflowY={"hidden"}
+          borderRadius={"lg"}
         >
-          New Group
-        </Button>
-      </Box>
-      <Box
-        display={"flex"}
-        flexDir={"column"}
-        p={3}
-        bg="#f8f8f8"
-        width={"100%"}
-        height={"100%"}
-        overflowY={"hidden"}
-        borderRadius={"lg"}
-      >
-        {chats ? (
-          <>
-            <Stack height={"100%"} width={"100%"} overflowY={"scroll"}>
-              {chats.map((chat) => {
-                <Box
-                  onClick={() => {
-                    setSelectedChat(chat);
-                  }}
-                  cursor={"pointer"}
-                  bg={selectedChat === chat ? "#38b2ac" : "#e8e8e8"}
-                  color={selectedChat === chat ? "white" : "black"}
-                  px={3}
-                  py={2}
-                  borderRadius={"lg"}
-                  key={chat._id}
-                  height={"10%"}
-                  width={"100%"}
-                >
-                  <Text variant={"h1"}>
-                    {chat.name}
-                  </Text>
-                </Box>;
-              })}
-            </Stack>
-          </>
-        ) : (
-          <h1>no chats</h1>
-        )}
-      </Box>
+          {chats ? (
+            <>
+              <Stack height={"100%"} width={"100%"} p={1} overflowY={"scroll"}>
+                {chats.map((chat) => {
+                  return (
+                    <Box
+                      onClick={() => {
+                        setSelectedChat(chat);
+                      }}
+                      cursor={"pointer"}
+                      bg={selectedChat === chat ? "#38b2ac" : "#e8e8e8"}
+                      color={selectedChat === chat ? "white" : "black"}
+                      px={3}
+                      py={2}
+                      borderRadius={"lg"}
+                      key={chat._id}
+                    >
+                      <Text>
+                        {!chat?.isGroup
+                          ? getSender(user, chat.users)
+                          : chat.name}
+                      </Text>
+                    </Box>
+                  );
+                })}
+              </Stack>
+            </>
+          ) : (
+            <h1>no chats</h1>
+          )}
+        </Box>
+      ) : (
+        <Box
+          display={"flex"}
+          flexDir={"column"}
+          p={3}
+          bg="#f8f8f8"
+          width={"100%"}
+          height={"100%"}
+          overflowY={"hidden"}
+          borderRadius={"lg"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+          />{" "}
+        </Box>
+      )}
     </Box>
   );
 };

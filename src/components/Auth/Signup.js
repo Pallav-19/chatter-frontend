@@ -101,7 +101,7 @@ const Signup = () => {
         setName("");
         setPassword("");
         localStorage.setItem("Auth", await response.data.token);
-        navigate("/chat");
+        navigate("/");
       }
     }
   };

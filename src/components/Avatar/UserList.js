@@ -1,12 +1,10 @@
 import React from "react";
 import { Avatar, Box, Text } from "@chakra-ui/react";
-const UserList = ({ user, accessChat }) => {
+const UserList = ({ user, handleClick }) => {
   return (
     <div>
       <Box
-        onClick={() => {
-          accessChat(user._id);
-        }}
+        onClick={handleClick}
         display={"flex"}
         cursor="pointer"
         bg={"#e8e8e8"}

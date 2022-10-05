@@ -19,7 +19,7 @@ import { ViewIcon } from "@chakra-ui/icons";
 import "./ProfileModal.css";
 const ProfileModal = ({ user, children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
- 
+
   return (
     <div>
       {children ? (
@@ -44,7 +44,9 @@ const ProfileModal = ({ user, children }) => {
                 marginTop="4"
                 border={"1px"}
                 boxSize="9rem"
-                src={user.image}
+                src={
+                  "https://www.dgvaishnavcollege.edu.in/dgvaishnav-c/uploads/2021/01/dummy-profile-pic.jpg"
+                }
                 alt={user?.name}
               ></Image>
             ) : (

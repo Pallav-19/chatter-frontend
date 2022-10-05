@@ -105,7 +105,7 @@ const SideDrawer = () => {
           },
         }
       );
-      if (!chats.find(async (c) => c._id === (await data.chat._id))) {
+      if (!chats?.find(async (c) => c._id === (await data.chat._id))) {
         setChats([await data.chat, ...chats]);
       }
       setSelectedChat(await data.chat);
@@ -155,7 +155,7 @@ const SideDrawer = () => {
           <MenuList>
             <ProfileModal user={user}>
               <MenuItem>
-                <i  className="fa-solid fa-user menuicons"></i>My Profile
+                <i className="fa-solid fa-user menuicons"></i>My Profile
               </MenuItem>
             </ProfileModal>
 
@@ -165,7 +165,7 @@ const SideDrawer = () => {
                 logout();
               }}
             >
-              <i  className="fa-solid fa-right-from-bracket menuicons"></i>Logout
+              <i className="fa-solid fa-right-from-bracket menuicons"></i>Logout
             </MenuItem>
           </MenuList>
         </Menu>
@@ -198,7 +198,14 @@ const SideDrawer = () => {
               <SkeletonComponent />
             ) : searchResults.length > 0 ? (
               searchResults.map((searchResult) => {
-                return <UserList user={searchResult} accessChat={accessChat} />;
+                return (
+                  <UserList
+                    user={searchResult}
+                    handleClick={() => {
+                      accessChat(user._id);
+                    }}
+                  />
+                );
               })
             ) : (
               <span>{text}</span>
