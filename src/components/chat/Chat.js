@@ -4,20 +4,30 @@ import ChatContext from "../contexts/chats/ChatContext";
 import SideDrawer from "../miscellaneous/SideDrawer";
 import MyChats from "../chat/MyChats";
 import ChatBox from "../chat/ChatBox";
-import "./Chat.css";
+import { Box } from "@chakra-ui/react";
 const Chat = () => {
   const { LoggedIn, setLoggedIn } = useContext(ChatContext);
-  const [fetchAgain, setFetchAgain] = React.useState(false);
+  
   return (
-    <div className="Chat">
+    <Box
+      width={"100%"}
+      height={"100%"}
+      display={"flex"}
+      flexDirection={"column"}
+    >
       {LoggedIn && <SideDrawer />}
-      <div className="chatbox">
-        {LoggedIn && (
-          <MyChats fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
-        )}
-        {LoggedIn && <ChatBox fetchAgain={fetchAgain} />}
-      </div>
-    </div>
+      <Box
+        display={"flex"}
+        width={"100%"}
+        height={"85%"}
+        justifyContent={"space-between"}
+        alignItems={"center"}
+        padding={"0.5rem"}
+      >
+        {LoggedIn && <MyChats />}
+        {LoggedIn && <ChatBox />}
+      </Box>
+    </Box>
   );
 };
 

@@ -6,10 +6,10 @@ import { Box, Button, useToast, Text, Stack, Spinner } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import ChatContext from "../contexts/chats/ChatContext";
 import axios from "axios";
-import { Navigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import CreateGroupModal from "../miscellaneous/CreateGroupModal";
 
-const MyChats = ({ fetchAgain, setFetchAgain }) => {
+const MyChats = () => {
   const [loading, setLoading] = React.useState(false);
   const { selectedChat, setSelectedChat, chats, setChats } =
     React.useContext(ChatContext);
@@ -26,6 +26,7 @@ const MyChats = ({ fetchAgain, setFetchAgain }) => {
         },
       });
       if ((await data.length) > 0) {
+        console.log(await data);
         setChats(await data);
       }
       setLoading(false);
@@ -39,7 +40,6 @@ const MyChats = ({ fetchAgain, setFetchAgain }) => {
       });
       setLoading(false);
     }
-    setFetchAgain(true);
   };
   const getSender = (user, users) => {
     return users[0]._id === user.userId ? users[1].name : users[0].name;
@@ -47,7 +47,7 @@ const MyChats = ({ fetchAgain, setFetchAgain }) => {
   React.useEffect(() => {
     fetchChats();
     console.log(chats);
-  }, [fetchAgain]);
+  }, [useLocation()]);
   return (
     <Box
       display={{ base: selectedChat ? "none" : "flex", md: "flex" }}

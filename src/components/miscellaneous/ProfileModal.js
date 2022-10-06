@@ -18,7 +18,6 @@ import {
 } from "@chakra-ui/react";
 import { ViewIcon } from "@chakra-ui/icons";
 import ChatContext from "../contexts/chats/ChatContext";
-import "./ProfileModal.css";
 const ProfileModal = ({ userReceived, children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { user } = React.useContext(ChatContext);
@@ -44,7 +43,13 @@ const ProfileModal = ({ userReceived, children }) => {
         <ModalOverlay />
         <ModalContent>
           <ModalCloseButton />
-          <ModalBody className="mbody">
+          <ModalBody
+            display={"flex"}
+            flexDirection={"column"}
+            alignItems={"center"}
+            justifyContent={"center"}
+            width={"100%"}
+          >
             {userReceived.image ? (
               <Image
                 borderRadius={"full"}
@@ -64,9 +69,10 @@ const ProfileModal = ({ userReceived, children }) => {
               ></Avatar>
             )}
             <ModalHeader
-              className="mheader"
+              
               fontFamily={"ubuntu , sans"}
               fontSize={"2rem"}
+              textAlign={"center"}
             >
               {userReceived?.name}
             </ModalHeader>

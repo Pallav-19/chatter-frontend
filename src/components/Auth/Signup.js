@@ -1,21 +1,46 @@
+/* eslint-disable eqeqeq */
 /* eslint-disable no-unused-vars */
 import React from "react";
-import { FormControl, FormLabel, useToast } from "@chakra-ui/react";
-import { InputGroup } from "@chakra-ui/react";
-import { InputRightElement } from "@chakra-ui/react";
-import { Input } from "@chakra-ui/react";
-import { Stack } from "@chakra-ui/react";
-import { Button } from "@chakra-ui/react";
+import {
+  FormControl,
+  useToast,
+  InputGroup,
+  InputRightElement,
+  Input,
+  Stack,
+  Button,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  HStack,
+  PinInput,
+  PinInputField,
+  InputLeftAddon,
+} from "@chakra-ui/react";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+
+import axios from "axios";
 import validator from "validator";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 const Signup = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [inputOTP, setInputOTP] = React.useState();
+  const [outputOTP, setOutputOTP] = React.useState();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [name, setName] = React.useState("");
   const [show, setShow] = React.useState(false);
   const [cshow, setCshow] = React.useState(false);
   const [confirmpassword, setConfirmPassword] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+  const [verifyLoading, setVerifyLoading] = React.useState(false);
+  const [resendLoading, setResendLoading] = React.useState(false);
+
   const toast = useToast();
   const navigate = useNavigate();
   const handleClick = () => {
@@ -26,59 +51,129 @@ const Signup = () => {
   };
   const submitHandler = async () => {
     let errorCount = 0;
-    if (!email || !name || !password || !confirmpassword) {
+
+    if (!name) {
       errorCount++;
       toast({
-        title: "Please enter All the values !",
+        title: "Enter Your Name!",
         status: "warning",
         duration: 5000,
         isClosable: true,
         position: "top-right",
       });
+    } else {
+      if (name.length < 3) {
+        errorCount++;
+        toast({
+          title: "Name must be 3 characters or more!",
+          status: "warning",
+          duration: 5000,
+          isClosable: true,
+          position: "top-right",
+        });
+      }
     }
-    if (password.length < 5 && confirmpassword.length < 5) {
+    if (!email) {
       errorCount++;
       toast({
-        title: "Password Must be more than 5 characters!",
+        title: "Please your email address!",
         status: "warning",
         duration: 5000,
         isClosable: true,
         position: "top-right",
       });
+    } else {
+      if (!validator.isEmail(email)) {
+        errorCount++;
+        toast({
+          title: "Invalid Email Address",
+          status: "warning",
+          duration: 5000,
+          isClosable: true,
+          position: "top-right",
+        });
+      }
     }
-    if (!validator.isEmail(email)) {
-      errorCount++;
-      toast({
-        title: "Invalid Email Address",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-        position: "top-right",
-      });
+    if (!password || !confirmpassword) {
+      if (!password) {
+        errorCount++;
+        toast({
+          title: "Enter Password",
+          status: "warning",
+          duration: 5000,
+          isClosable: true,
+          position: "top-right",
+        });
+      } else {
+        if (password.length < 5) {
+          errorCount++;
+          toast({
+            title: "Password Must be more than 5 characters!",
+            status: "warning",
+            duration: 5000,
+            isClosable: true,
+            position: "top-right",
+          });
+        }
+      }
+      if (!confirmpassword) {
+        errorCount++;
+        toast({
+          title: "Enter Confirm Password",
+          status: "warning",
+          duration: 5000,
+          isClosable: true,
+          position: "top-right",
+        });
+      }
+    } else {
+      if (password !== confirmpassword) {
+        errorCount++;
+        toast({
+          title: "Password and Confirm Password Did not match!",
+          status: "warning",
+          duration: 5000,
+          isClosable: true,
+          position: "top-right",
+        });
+      }
     }
-    if (password !== confirmpassword) {
-      errorCount++;
-      toast({
-        title: "Password and Confirm Password Did not match!",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-        position: "top-right",
-      });
-    }
-    if (name.length < 3) {
-      errorCount++;
-      toast({
-        title: "Name must be 3 characters or more!",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-        position: "top-right",
-      });
-    }
+
     if (errorCount === 0) {
+      setLoading(true);
+      const { data } = await axios.post(
+        "/api/auth/sendOTP",
+        {
+          emailOTP: email,
+          name,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }
+      );
+      toast({
+        title: await data.message,
+        duration: 5000,
+        status: (await data.success) ? "success" : "error",
+        position: "top-right",
+        isClosable: true,
+      });
+      if (await data.success) {
+        onOpen();
+        setOutputOTP(await data.outputOTP);
+        setInputOTP("");
+      }
+      setLoading(false);
+    }
+  };
+  const verify = async () => {
+    setVerifyLoading(true);
+    if (inputOTP == outputOTP) {
       const response = await axios.post(
-        "http://localhost:5100/api/auth/signup",
+        "/api/auth/signup",
         { name, email, password },
         {
           headers: {
@@ -87,7 +182,6 @@ const Signup = () => {
           },
         }
       );
-
       toast({
         title: await response.data.message,
         status: (await response.data.success) ? "success" : "error",
@@ -103,35 +197,111 @@ const Signup = () => {
         localStorage.setItem("Auth", await response.data.token);
         navigate("/");
       }
+    } else {
+      toast({
+        title: "OTP did not match!",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
     }
+    setVerifyLoading(false);
+  };
+  const resend = async () => {
+    setResendLoading(true);
+    if (inputOTP == outputOTP) {
+      const response = await axios.post(
+        "/api/auth/signup",
+        { name, email, password },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }
+      );
+      toast({
+        title: await response.data.message,
+        status: (await response.data.success) ? "success" : "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
+      if (await response.data.success) {
+        setConfirmPassword("");
+        setEmail("");
+        setName("");
+        setPassword("");
+        localStorage.setItem("Auth", await response.data.token);
+        navigate("/");
+      }
+    } else {
+      toast({
+        title: "OTP did not match!",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+      });
+    }
+    setResendLoading(false);
   };
   return (
     <div>
       {" "}
       <Stack spacing={10}>
         <FormControl>
-          <FormLabel>Name</FormLabel>
-          <Input
-            isRequired
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-            type="text"
-          />
-
-          <FormLabel>Email Address</FormLabel>
-          <Input
-            isRequired
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-            type="email"
-          />
-          <FormLabel>Password</FormLabel>
-          <InputGroup>
+          <InputGroup mb={6} mt={4}>
+            <InputLeftAddon
+              fontFamily={"ubuntu,sans"}
+              fontSize={{ base: "xs", md: "lg" }}
+              children={"Name"}
+            ></InputLeftAddon>
             <Input
+              _placeholder={{ fontSize: { base: "xs", md: "lg" } }}
+              borderWidth={3}
+              placeholder="Enter your name here"
+              isRequired
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+              type="text"
+            />
+          </InputGroup>
+
+          <InputGroup mb={6}>
+            <InputLeftAddon
+              fontFamily={"ubuntu,sans"}
+              fontSize={{ base: "xs", md: "lg" }}
+              children={"Email Address"}
+            ></InputLeftAddon>{" "}
+            <Input
+              _placeholder={{ fontSize: { base: "xs", md: "lg" } }}
+              borderWidth={3}
+              placeholder="Enter your Email address here"
+              isRequired
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+              type="email"
+            />
+          </InputGroup>
+
+          {/* <FormLabel>Password</FormLabel> */}
+
+          <InputGroup mb={6}>
+            <InputLeftAddon
+              fontFamily={"ubuntu,sans"}
+              fontSize={{ base: "xs", md: "lg" }}
+              children={"Password"}
+            ></InputLeftAddon>
+            <Input
+              _placeholder={{ fontSize: { base: "xs", md: "lg" } }}
+              borderWidth={3}
+              placeholder="Create a Password"
               isRequired
               value={password}
               onChange={(e) => {
@@ -141,19 +311,26 @@ const Signup = () => {
             />
             <InputRightElement width={"4.5rem"}>
               <Button
-                disabled={!password ? true : false}
+                hidden={!password ? true : false}
                 h="1.75rem"
                 size="sm"
                 onClick={handleClick}
               >
-                {show ? "Hide" : "Show"}
+                {show ? <ViewOffIcon /> : <ViewIcon />}
               </Button>
             </InputRightElement>
           </InputGroup>
 
-          <FormLabel>Confirm Password</FormLabel>
-          <InputGroup>
+          <InputGroup mb={6}>
+            <InputLeftAddon
+              fontFamily={"ubuntu,sans"}
+              fontSize={{ base: "xs", md: "lg" }}
+              children={"Confirm Password"}
+            ></InputLeftAddon>
             <Input
+              _placeholder={{ fontSize: { base: "xs", md: "lg" } }}
+              borderWidth={3}
+              placeholder="Re-type your password"
               isRequired
               value={confirmpassword}
               onChange={(e) => {
@@ -163,12 +340,12 @@ const Signup = () => {
             />
             <InputRightElement width={"4.5rem"}>
               <Button
-                disabled={!confirmpassword ? true : false}
+                hidden={!confirmpassword ? true : false}
                 h="1.75rem"
                 size="sm"
                 onClick={chandleclilck}
               >
-                {cshow ? "Hide" : "Show"}
+                {cshow ? <ViewOffIcon /> : <ViewIcon />}
               </Button>
             </InputRightElement>
           </InputGroup>
@@ -178,9 +355,71 @@ const Signup = () => {
             mt={"2rem"}
             colorScheme="blue"
             variant="solid"
+            isLoading={loading}
+            loadingText="Sending OTP"
           >
             Signup
           </Button>
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader mt={3} fontSize={"xl"}>
+                Enter OTP sent to {email}
+              </ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <HStack
+                  display={"flex"}
+                  alignItems={"center"}
+                  width={"100%"}
+                  justifyContent={"center"}
+                  marginTop={7}
+                  marginBottom={5}
+                >
+                  <PinInput
+                    focusBorderColor="blue.500"
+                    autoFocus
+                    manageFocus={true}
+                    otp
+                    type="number"
+                    value={inputOTP}
+                    onChange={(value) => {
+                      setInputOTP(value);
+                      console.log(inputOTP);
+                    }}
+                  >
+                    {/* <PinInputField border={"2px solid"} /> */}
+                    <PinInputField border={"2px solid"} />
+                    <PinInputField border={"2px solid"} />
+                    <PinInputField border={"2px solid"} />
+                  </PinInput>
+                </HStack>
+              </ModalBody>
+
+              <ModalFooter>
+                <Button
+                  isLoading={verifyLoading}
+                  loadingText="Verifying OTP!"
+                  colorScheme="blue"
+                  mr={3}
+                  onClick={() => {
+                    verify();
+                  }}
+                >
+                  Verify
+                </Button>
+                <Button
+                  isLoading={resendLoading}
+                  loadingText="Resending OTP"
+                  variant="ghost"
+                  colorScheme={"blue"}
+                  onClick={resend}
+                >
+                  Resend OTP
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
         </FormControl>
       </Stack>
     </div>

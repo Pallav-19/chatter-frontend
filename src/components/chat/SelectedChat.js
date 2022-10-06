@@ -56,7 +56,6 @@ const SelectedChat = () => {
                 <IconButton
                   icon={<InfoIcon />}
                   color={"black"}
-                  bg={"#e8e8e8"}
                   borderRadius={"lg"}
                   padding={"1"}
                   _hover={{ color: "white", background: "teal" }}

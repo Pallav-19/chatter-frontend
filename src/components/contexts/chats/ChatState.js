@@ -8,7 +8,8 @@ import { useLocation } from "react-router-dom";
 
 const ChatState = ({ children }) => {
   const [selectedChat, setSelectedChat] = React.useState();
-  const [chats, setChats] = React.useState();
+  const [chats, setChats] = React.useState([]);
+  let [fetchAgain, setFetchAgain] = React.useState(0);
   const location = useLocation();
   const [LoggedIn, setLoggedIn] = React.useState(false);
   const [user, setUser] = React.useState();
@@ -33,6 +34,8 @@ const ChatState = ({ children }) => {
         setLoggedIn,
         user,
         setUser,
+        fetchAgain,
+        setFetchAgain,
       }}
     >
       {children}

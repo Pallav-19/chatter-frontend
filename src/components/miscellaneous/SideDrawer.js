@@ -20,18 +20,24 @@ import {
   DrawerContent,
   DrawerCloseButton,
   Input,
+  Box,
   useToast,
 } from "@chakra-ui/react";
 import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import ChatContext from "../contexts/chats/ChatContext";
 import ProfileModal from "./ProfileModal.js";
 import SkeletonComponent from "./SkeletonComponent.js";
-import "./SideDrawer.css";
 import UserList from "../Avatar/UserList";
 const SideDrawer = () => {
   const { user } = React.useContext(ChatContext);
-  const { selectedChat, setSelectedChat, chats, setChats } =
-    React.useContext(ChatContext);
+  let {
+    selectedChat,
+    setSelectedChat,
+    chats,
+    setChats,
+    fetchAgain,
+    setFetchAgain,
+  } = React.useContext(ChatContext);
   const navigate = useNavigate();
 
   const [search, setSearch] = React.useState();
@@ -91,12 +97,14 @@ const SideDrawer = () => {
       });
     }
   };
-  const accessChat = async (userId) => {
+  const accessChat = async (selectedUserId) => {
+    console.log(user.userId);
+    console.log(selectedUserId);
     try {
       setLoadingChat(true);
       const { data } = await axios.post(
         `/api/chat/accessChat`,
-        { userId },
+        { userId: selectedUserId },
         {
           headers: {
             "Content-Type": "application/json",
@@ -105,7 +113,7 @@ const SideDrawer = () => {
           },
         }
       );
-      if (!chats?.find(async (c) => c._id === (await data.chat._id))) {
+      if (!chats?.find(async (c) => c._id === (await data.chat?._id))) {
         setChats([await data.chat, ...chats]);
       }
       setSelectedChat(await data.chat);
@@ -121,9 +129,18 @@ const SideDrawer = () => {
     }
     onClose();
     navigate("/");
+    setFetchAgain(fetchAgain++)
   };
   return (
-    <div className="sideDrawer">
+    <Box
+      display={"flex"}
+      alignItems="center"
+      justifyContent={"space-between"}
+      width={"100%"}
+      padding={"0.4rem 0.7rem"}
+      borderWidth={"0.3rem"}
+      borderInner
+    >
       <Tooltip label="Search Users to chat" hasArrow placement="bottom">
         <Button variant="ghost" onClick={onOpen}>
           <i className="fa-solid fa-magnifying-glass"></i>
@@ -155,7 +172,11 @@ const SideDrawer = () => {
           <MenuList>
             <ProfileModal userReceived={user}>
               <MenuItem>
-                <i className="fa-solid fa-user menuicons"></i>My Profile
+                <i
+                  style={{ marginRight: "0.5rem" }}
+                  className="fa-solid fa-user "
+                ></i>
+                My Profile
               </MenuItem>
             </ProfileModal>
 
@@ -165,7 +186,11 @@ const SideDrawer = () => {
                 logout();
               }}
             >
-              <i className="fa-solid fa-right-from-bracket menuicons"></i>Logout
+              <i
+                style={{ marginRight: "0.5rem" }}
+                className="fa-solid fa-right-from-bracket "
+              ></i>
+              Logout
             </MenuItem>
           </MenuList>
         </Menu>
@@ -183,7 +208,7 @@ const SideDrawer = () => {
           <DrawerHeader>Search Users</DrawerHeader>
 
           <DrawerBody>
-            <div className="searchBox">
+            <Box display={"flex"} flexDirection={"row"}>
               <Input
                 placeholder="Search by name or email."
                 mr={"2"}
@@ -193,7 +218,7 @@ const SideDrawer = () => {
                 }}
               />
               <Button onClick={handleSearch}>Go</Button>
-            </div>
+            </Box>
             {loading ? (
               <SkeletonComponent />
             ) : searchResults.length > 0 ? (
@@ -202,7 +227,7 @@ const SideDrawer = () => {
                   <UserList
                     user={searchResult}
                     handleClick={() => {
-                      accessChat(user._id);
+                      accessChat(searchResult._id);
                     }}
                   />
                 );
@@ -213,7 +238,7 @@ const SideDrawer = () => {
           </DrawerBody>
         </DrawerContent>
       </Drawer>
-    </div>
+    </Box>
   );
 };
 

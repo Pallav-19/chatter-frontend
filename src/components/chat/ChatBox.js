@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
-import "./chatBox.css";
 import { Box } from "@chakra-ui/react";
 import ChatContext from "../contexts/chats/ChatContext";
 import SelectedChat from "./SelectedChat";
