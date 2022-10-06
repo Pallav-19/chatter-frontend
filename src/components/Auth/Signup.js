@@ -33,10 +33,10 @@ const Signup = () => {
   const [outputOTP, setOutputOTP] = React.useState();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [confirmpassword, setConfirmPassword] = React.useState("");
   const [name, setName] = React.useState("");
   const [show, setShow] = React.useState(false);
   const [cshow, setCshow] = React.useState(false);
-  const [confirmpassword, setConfirmPassword] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const [verifyLoading, setVerifyLoading] = React.useState(false);
   const [resendLoading, setResendLoading] = React.useState(false);
@@ -142,7 +142,7 @@ const Signup = () => {
     if (errorCount === 0) {
       setLoading(true);
       const { data } = await axios.post(
-        "/api/auth/sendOTP",
+        "/api/auth/sendOTP/verification",
         {
           emailOTP: email,
           name,
