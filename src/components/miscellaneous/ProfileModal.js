@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React from "react";
 import {
@@ -16,10 +17,15 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { ViewIcon } from "@chakra-ui/icons";
+import ChatContext from "../contexts/chats/ChatContext";
 import "./ProfileModal.css";
-const ProfileModal = ({ user, children }) => {
+const ProfileModal = ({ userReceived, children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const { user } = React.useContext(ChatContext);
+  React.useEffect(() => {
+    console.log(user);
+    console.log(userReceived);
+  }, []);
   return (
     <div>
       {children ? (
@@ -30,6 +36,7 @@ const ProfileModal = ({ user, children }) => {
             icon={<ViewIcon />}
             d={{ base: "flex" }}
             onClick={onOpen}
+            _hover={{ color: "white", bg: "teal" }}
           ></IconButton>
         </span>
       )}
@@ -38,7 +45,7 @@ const ProfileModal = ({ user, children }) => {
         <ModalContent>
           <ModalCloseButton />
           <ModalBody className="mbody">
-            {user.image ? (
+            {userReceived.image ? (
               <Image
                 borderRadius={"full"}
                 marginTop="4"
@@ -47,25 +54,33 @@ const ProfileModal = ({ user, children }) => {
                 src={
                   "https://www.dgvaishnavcollege.edu.in/dgvaishnav-c/uploads/2021/01/dummy-profile-pic.jpg"
                 }
-                alt={user?.name}
+                alt={userReceived?.name}
               ></Image>
             ) : (
-              <Avatar size="2xl" cursor={"pointer"} name={user?.name}></Avatar>
+              <Avatar
+                size="2xl"
+                cursor={"pointer"}
+                name={userReceived?.name}
+              ></Avatar>
             )}
             <ModalHeader
               className="mheader"
               fontFamily={"ubuntu , sans"}
               fontSize={"2rem"}
             >
-              {user?.name}
+              {userReceived?.name}
             </ModalHeader>
             <Text fontFamily={"ubuntu,sans"} fontSize="1rem">
-              Email: {user.email}
+              Email: {userReceived.email}
             </Text>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3}>
+            <Button
+              display={user === userReceived ? "flex" : "none"}
+              colorScheme="blue"
+              mr={3}
+            >
               Edit Profile
             </Button>
             <Button onClick={onClose} variant="ghost">

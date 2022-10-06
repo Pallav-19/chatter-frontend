@@ -9,7 +9,7 @@ import axios from "axios";
 import { Navigate, useLocation } from "react-router-dom";
 import CreateGroupModal from "../miscellaneous/CreateGroupModal";
 
-const MyChats = () => {
+const MyChats = ({ fetchAgain, setFetchAgain }) => {
   const [loading, setLoading] = React.useState(false);
   const { selectedChat, setSelectedChat, chats, setChats } =
     React.useContext(ChatContext);
@@ -39,7 +39,7 @@ const MyChats = () => {
       });
       setLoading(false);
     }
-    Navigate("/");
+    setFetchAgain(true);
   };
   const getSender = (user, users) => {
     return users[0]._id === user.userId ? users[1].name : users[0].name;
@@ -47,7 +47,7 @@ const MyChats = () => {
   React.useEffect(() => {
     fetchChats();
     console.log(chats);
-  }, [useLocation()]);
+  }, [fetchAgain]);
   return (
     <Box
       display={{ base: selectedChat ? "none" : "flex", md: "flex" }}

@@ -153,7 +153,7 @@ const SideDrawer = () => {
             ></Avatar>
           </MenuButton>
           <MenuList>
-            <ProfileModal user={user}>
+            <ProfileModal userReceived={user}>
               <MenuItem>
                 <i className="fa-solid fa-user menuicons"></i>My Profile
               </MenuItem>
