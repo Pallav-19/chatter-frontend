@@ -14,7 +14,7 @@ const ChatBox = () => {
       borderRadius={"lg"}
       borderWidth="1px"
       p={1}
-      bg={"white"}
+      // bg={"white"}
     >
       <SelectedChat></SelectedChat>
     </Box>

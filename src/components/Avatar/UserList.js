@@ -8,7 +8,7 @@ const UserList = ({ user, handleClick }) => {
         display={"flex"}
         cursor="pointer"
         bg={"#e8e8e8"}
-        _hover={{ color: "white", background: "#38b2ac" }}
+        _hover={{ color: "white", background: "blue.500" }}
         w={"100%"}
         px={3}
         py={2}

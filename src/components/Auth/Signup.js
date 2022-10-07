@@ -59,7 +59,7 @@ const Signup = () => {
         status: "warning",
         duration: 5000,
         isClosable: true,
-        position: "top-right",
+        position: "top-left",
       });
     } else {
       if (name.length < 3) {
@@ -69,7 +69,7 @@ const Signup = () => {
           status: "warning",
           duration: 5000,
           isClosable: true,
-          position: "top-right",
+          position: "top-left",
         });
       }
     }
@@ -80,7 +80,7 @@ const Signup = () => {
         status: "warning",
         duration: 5000,
         isClosable: true,
-        position: "top-right",
+        position: "top-left",
       });
     } else {
       if (!validator.isEmail(email)) {
@@ -90,7 +90,7 @@ const Signup = () => {
           status: "warning",
           duration: 5000,
           isClosable: true,
-          position: "top-right",
+          position: "top-left",
         });
       }
     }
@@ -102,7 +102,7 @@ const Signup = () => {
           status: "warning",
           duration: 5000,
           isClosable: true,
-          position: "top-right",
+          position: "top-left",
         });
       } else {
         if (password.length < 5) {
@@ -112,7 +112,7 @@ const Signup = () => {
             status: "warning",
             duration: 5000,
             isClosable: true,
-            position: "top-right",
+            position: "top-left",
           });
         }
       }
@@ -123,7 +123,7 @@ const Signup = () => {
           status: "warning",
           duration: 5000,
           isClosable: true,
-          position: "top-right",
+          position: "top-left",
         });
       }
     } else {
@@ -134,7 +134,7 @@ const Signup = () => {
           status: "warning",
           duration: 5000,
           isClosable: true,
-          position: "top-right",
+          position: "top-left",
         });
       }
     }
@@ -158,7 +158,7 @@ const Signup = () => {
         title: await data.message,
         duration: 5000,
         status: (await data.success) ? "success" : "error",
-        position: "top-right",
+        position: "top-left",
         isClosable: true,
       });
       if (await data.success) {
@@ -187,7 +187,7 @@ const Signup = () => {
         status: (await response.data.success) ? "success" : "error",
         duration: 5000,
         isClosable: true,
-        position: "top-right",
+        position: "top-left",
       });
       if (await response.data.success) {
         setConfirmPassword("");
@@ -203,7 +203,7 @@ const Signup = () => {
         status: "error",
         duration: 5000,
         isClosable: true,
-        position: "top-right",
+        position: "top-left",
       });
     }
     setVerifyLoading(false);
@@ -226,7 +226,7 @@ const Signup = () => {
         status: (await response.data.success) ? "success" : "error",
         duration: 5000,
         isClosable: true,
-        position: "top-right",
+        position: "top-left",
       });
       if (await response.data.success) {
         setConfirmPassword("");
@@ -242,7 +242,7 @@ const Signup = () => {
         status: "error",
         duration: 5000,
         isClosable: true,
-        position: "top-right",
+        position: "top-left",
       });
     }
     setResendLoading(false);
@@ -360,7 +360,7 @@ const Signup = () => {
           >
             Signup
           </Button>
-          <Modal isOpen={isOpen} onClose={onClose}>
+          <Modal isCentered isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
               <ModalHeader mt={3} fontSize={"xl"}>

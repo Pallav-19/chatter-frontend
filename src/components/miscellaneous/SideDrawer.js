@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useColorMode } from "@chakra-ui/react";
 import axios from "axios";
 import {
   Tooltip,
@@ -23,13 +24,14 @@ import {
   Box,
   useToast,
 } from "@chakra-ui/react";
-import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
+import { BellIcon, ChevronDownIcon, SunIcon, MoonIcon } from "@chakra-ui/icons";
 import ChatContext from "../contexts/chats/ChatContext";
 import ProfileModal from "./ProfileModal.js";
 import SkeletonComponent from "./SkeletonComponent.js";
 import UserList from "../Avatar/UserList";
 const SideDrawer = () => {
   const { user } = React.useContext(ChatContext);
+  const { colorMode, toggleColorMode } = useColorMode();
   let {
     selectedChat,
     setSelectedChat,
@@ -58,7 +60,7 @@ const SideDrawer = () => {
         status: "warning",
         duration: 5000,
         isClosable: true,
-        position: "top-right",
+        position: "top-left",
       });
     }
     try {
@@ -82,7 +84,7 @@ const SideDrawer = () => {
           status: (await data.success) ? "success" : "error",
           duration: 5000,
           isClosable: true,
-          position: "top-right",
+          position: "top-left",
         });
         setLoading(false);
         setText("Couldn't Search !");
@@ -93,7 +95,7 @@ const SideDrawer = () => {
         status: "error",
         duration: 5000,
         isClosable: true,
-        position: "top-right",
+        position: "top-left",
       });
     }
   };
@@ -124,12 +126,12 @@ const SideDrawer = () => {
         status: "error",
         duration: 5000,
         isClosable: true,
-        position: "top-right",
+        position: "top-left",
       });
     }
     onClose();
     navigate("/");
-    setFetchAgain(fetchAgain++)
+    setFetchAgain(fetchAgain++);
   };
   return (
     <Box
@@ -146,15 +148,31 @@ const SideDrawer = () => {
           <i className="fa-solid fa-magnifying-glass"></i>
         </Button>
       </Tooltip>
-      <Text fontSize={{ base: "md", md: "2xl" }} fontFamily={"ubuntu,sans"}>
+      <Text
+        display={{ base: "none" }}
+        fontSize={{ base: "md", md: "2xl" }}
+        fontFamily={"ubuntu,sans"}
+      >
         Chatter
       </Text>
-      <div>
+      <Box>
+        <Menu>
+          {" "}
+          <MenuButton
+            size={{ base: "sm", md: "md" }}
+            mx={"2"}
+            as={Button}
+            onClick={toggleColorMode}
+          >
+            {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+          </MenuButton>
+        </Menu>
+
         <Menu>
           <MenuButton size={{ base: "sm", md: "md" }} mx={"2"} as={Button}>
             <BellIcon fontSize={"2xl"} margin="1"></BellIcon>
           </MenuButton>
-          <MenuList></MenuList>
+          {/* <MenuList></MenuList> */}
         </Menu>
         <Menu>
           <MenuButton
@@ -194,7 +212,7 @@ const SideDrawer = () => {
             </MenuItem>
           </MenuList>
         </Menu>
-      </div>
+      </Box>
       <Drawer
         className="drawer"
         placement="left"

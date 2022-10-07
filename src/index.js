@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
-import { extendTheme, ChakraProvider } from "@chakra-ui/react";
+import { extendTheme, ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import { BrowserRouter as Router } from "react-router-dom";
 import ChatState from "./components/contexts/chats/ChatState";
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -21,6 +22,7 @@ root.render(
     <Router>
       <ChatState>
         <ChakraProvider theme={theme}>
+          <ColorModeScript initialColorMode="dark" useSystemColorMode="false" />
           <App />
         </ChakraProvider>
       </ChatState>

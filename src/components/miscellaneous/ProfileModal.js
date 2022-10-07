@@ -35,11 +35,11 @@ const ProfileModal = ({ userReceived, children }) => {
             icon={<ViewIcon />}
             d={{ base: "flex" }}
             onClick={onOpen}
-            _hover={{ color: "white", bg: "teal" }}
+            _hover={{ color: "white", bg: "blue.500" }}
           ></IconButton>
         </span>
       )}
-      <Modal isOpen={isOpen} onClose={onClose} isCentered size={"lg"}>
+      <Modal isCentered isOpen={isOpen} onClose={onClose}  size={"lg"}>
         <ModalOverlay />
         <ModalContent>
           <ModalCloseButton />

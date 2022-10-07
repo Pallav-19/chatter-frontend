@@ -69,7 +69,7 @@ const Login = () => {
         title: "Enter your Email Address!",
         status: "warning",
         duration: 5000,
-        position: "top-right",
+        position: "top-left",
       });
     } else {
       if (!validator.isEmail(email)) {
@@ -78,7 +78,7 @@ const Login = () => {
           title: "Enter a Valid Email Address",
           status: "warning",
           duration: 5000,
-          position: "top-right",
+          position: "top-left",
         });
       }
     }
@@ -88,7 +88,7 @@ const Login = () => {
         title: "Enter Password",
         status: "warning",
         duration: 5000,
-        position: "top-right",
+        position: "top-left",
       });
     }
 
@@ -109,7 +109,7 @@ const Login = () => {
         status: (await response.data.success) ? "success" : "error",
         duration: 5000,
         isClosable: true,
-        position: "top-right",
+        position: "top-left",
       });
       if (await response.data.success) {
         setEmail("");
@@ -139,7 +139,7 @@ const Login = () => {
         title: await data.message,
         duration: 5000,
         status: (await data.success) ? "success" : "error",
-        position: "top-right",
+        position: "top-left",
         isClosable: true,
       });
       if (await data.success) {
@@ -151,7 +151,7 @@ const Login = () => {
         title: "Email address missing!",
         duration: 5000,
         status: "error",
-        position: "top-right",
+        position: "top-left",
         isClosable: true,
       });
     }
@@ -169,7 +169,7 @@ const Login = () => {
           title: "OTP did not match!",
           duration: 5000,
           status: "error",
-          position: "top-right",
+          position: "top-left",
           isClosable: true,
         });
       }
@@ -179,7 +179,7 @@ const Login = () => {
         description: "Enter OTP",
         duration: 5000,
         status: "error",
-        position: "top-right",
+        position: "top-left",
         isClosable: true,
       });
     }
@@ -197,7 +197,7 @@ const Login = () => {
           status: "warning",
           duration: 5000,
           isClosable: true,
-          position: "top-right",
+          position: "top-left",
         });
       } else {
         if (newpassword.length < 5) {
@@ -207,7 +207,7 @@ const Login = () => {
             status: "warning",
             duration: 5000,
             isClosable: true,
-            position: "top-right",
+            position: "top-left",
           });
         }
       }
@@ -218,7 +218,7 @@ const Login = () => {
           status: "warning",
           duration: 5000,
           isClosable: true,
-          position: "top-right",
+          position: "top-left",
         });
       }
     } else {
@@ -229,7 +229,7 @@ const Login = () => {
           status: "warning",
           duration: 5000,
           isClosable: true,
-          position: "top-right",
+          position: "top-left",
         });
       }
     }
@@ -250,7 +250,7 @@ const Login = () => {
         status: (await data.success) ? "success" : "error",
         duration: 5000,
         isClosable: true,
-        position: "top-right",
+        position: "top-left",
       });
     }
     setChangeLoading(false);
@@ -330,7 +330,7 @@ const Login = () => {
             </Link>
           </Text>
           <Modal
-            size={"sm"}
+            size={"lg"}
             isOpen={isOpen}
             onClose={() => {
               onClose();

@@ -12,7 +12,7 @@ const SelectedUsers = ({ user, handleClick }) => {
       mb={2}
       variant="solid"
       fontSize={12}
-      background={"teal"}
+      background={"blue.500"}
       color={"white"}
       cursor={"pointer"}
       onClick={handleClick}

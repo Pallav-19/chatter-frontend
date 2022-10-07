@@ -4,7 +4,7 @@ import ChatContext from "../contexts/chats/ChatContext";
 import { Box, IconButton, Text } from "@chakra-ui/react";
 import { ArrowBackIcon, InfoIcon, ViewIcon } from "@chakra-ui/icons";
 import ProfileModal from "../miscellaneous/ProfileModal";
-
+import GroupInfoModal from "../miscellaneous/GroupInfoModal";
 const SelectedChat = () => {
   const { selectedChat, setSelectedChat, user } = React.useContext(ChatContext);
   const getSender = (user, users) => {
@@ -29,11 +29,11 @@ const SelectedChat = () => {
           >
             <IconButton
               icon={<ArrowBackIcon />}
-              color={"black"}
-              bg={"#e8e8e8"}
+              // color={"black"}
+              // bg={"#fffff"}
               borderRadius={"lg"}
               padding={"1"}
-              _hover={{ color: "white", background: "teal" }}
+              _hover={{ color: "white", background: "blue.500" }}
               display={{ base: "flex", md: "none" }}
               onClick={() => {
                 setSelectedChat("");
@@ -53,20 +53,21 @@ const SelectedChat = () => {
                   userReceived={getUser(user, selectedChat.users)}
                 ></ProfileModal>
               ) : (
-                <IconButton
-                  icon={<InfoIcon />}
-                  color={"black"}
-                  borderRadius={"lg"}
-                  padding={"1"}
-                  _hover={{ color: "white", background: "teal" }}
-                />
+                <GroupInfoModal>
+                  <IconButton
+                    icon={<InfoIcon />}
+                    borderRadius={"lg"}
+                    padding={"1"}
+                    _hover={{ color: "white", background: "blue.500" }}
+                  />
+                </GroupInfoModal>
               )}
             </>
           </Box>
           <Box
             width={"100%"}
             height={"83%"}
-            bg={"#e8e8e8"}
+            bg={"#ffffff14"}
             borderRadius={"lg"}
           ></Box>
         </Box>

@@ -61,7 +61,7 @@ const CreateGroupModal = ({ children }) => {
         status: "error",
         duration: 5000,
         isClosable: true,
-        position: "top-right",
+        position: "top-left",
       });
     }
   };
@@ -72,7 +72,7 @@ const CreateGroupModal = ({ children }) => {
         duration: "5000",
         status: "warning",
         isClosable: true,
-        position: "top-right",
+        position: "top-left",
       });
       return;
     }
@@ -91,7 +91,7 @@ const CreateGroupModal = ({ children }) => {
         duration: "5000",
         status: "error",
         isClosable: true,
-        position: "top-right",
+        position: "top-left",
       });
     }
     if (!groupName) {
@@ -100,7 +100,7 @@ const CreateGroupModal = ({ children }) => {
         duration: "5000",
         status: "error",
         isClosable: true,
-        position: "top-right",
+        position: "top-left",
       });
     }
     if (groupName && selectedUsers) {
@@ -126,7 +126,7 @@ const CreateGroupModal = ({ children }) => {
           duration: "5000",
           status: (await data.success) ? "success" : "error",
           isClosable: true,
-          position: "top-right",
+          position: "top-left",
         });
 
         if (await data.success) {
@@ -143,7 +143,7 @@ const CreateGroupModal = ({ children }) => {
           duration: "5000",
           status: "error",
           isClosable: true,
-          position: "top-right",
+          position: "top-left",
         });
       }
     }
@@ -151,7 +151,7 @@ const CreateGroupModal = ({ children }) => {
   return (
     <>
       <span onClick={onOpen}>{children}</span>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isCentered isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader

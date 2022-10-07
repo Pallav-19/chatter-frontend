@@ -2,7 +2,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React from "react";
-import { Box, Button, useToast, Text, Stack, Spinner } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  useToast,
+  Text,
+  Stack,
+  Spinner,
+  Avatar,
+} from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import ChatContext from "../contexts/chats/ChatContext";
 import axios from "axios";
@@ -36,7 +44,7 @@ const MyChats = () => {
         status: "error",
         duration: 5000,
         isClosable: true,
-        position: "top-right",
+        position: "top-left",
       });
       setLoading(false);
     }
@@ -54,7 +62,7 @@ const MyChats = () => {
       flexDir="column"
       alignItems="column"
       p={3}
-      bg="white"
+      // bg="white"
       w={{ base: "100%", md: "35%" }}
       h={"100%"}
       borderRadius="lg"
@@ -71,8 +79,8 @@ const MyChats = () => {
         justifyContent={"space-between"}
         alignItems={"center"}
       >
-        <Text fontSize={"1.55rem"} fontFamily={"ubuntu, sans"}>
-          My Chats
+        <Text fontSize={"3xl"} fontFamily={"ubuntu, sans"}>
+          Chatter
         </Text>
         <CreateGroupModal>
           <Button
@@ -90,7 +98,7 @@ const MyChats = () => {
           display={"flex"}
           flexDir={"column"}
           p={3}
-          bg="#f8f8f8"
+          bg="#ffffff14"
           width={"100%"}
           height={"100%"}
           overflowY={"hidden"}
@@ -106,14 +114,23 @@ const MyChats = () => {
                         setSelectedChat(chat);
                       }}
                       cursor={"pointer"}
-                      bg={selectedChat === chat ? "#38b2ac" : "#e8e8e8"}
+                      bg={selectedChat === chat ? "blue.500" : "#e8e8e8"}
                       color={selectedChat === chat ? "white" : "black"}
                       px={3}
                       py={2}
                       borderRadius={"lg"}
                       key={chat._id}
                     >
-                      <Text>
+                      <Text display={"flex"} alignItems={"center"}>
+                        <Avatar
+                          mr={3}
+                          name={
+                            !chat?.isGroup
+                              ? getSender(user, chat.users)
+                              : chat.name
+                          }
+                          size={"sm"}
+                        />
                         {!chat?.isGroup
                           ? getSender(user, chat.users)
                           : chat.name}
