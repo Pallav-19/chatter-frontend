@@ -1,13 +1,25 @@
 /* eslint-disable no-unused-vars */
 import React, { useContext } from "react";
-import { Box, Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
+import { useColorMode } from "@chakra-ui/react";
+import {
+  Box,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+  IconButton,
+} from "@chakra-ui/react";
 import Login from "../Auth/Login";
 import Signup from "../Auth/Signup";
 import ChatContext from "../contexts/chats/ChatContext";
 import Chat from "../chat/Chat";
+import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+
 const Home = () => {
+  const { toggleColorMode, colorMode } = useColorMode();
   const context = useContext(ChatContext);
-  const { LoggedIn, setLoggedIn } = context;
+  const { LoggedIn } = context;
   return (
     <Box width={"100%"} height={"100%"}>
       {LoggedIn ? (
@@ -43,6 +55,18 @@ const Home = () => {
           </TabPanels>
         </Tabs>
       )}
+      <Box
+        position={"absolute"}
+        right={"0"}
+        bottom={"10%"}
+        width={"4rem"}
+        height={"2rem"}
+      >
+        <IconButton
+          onClick={toggleColorMode}
+          icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+        />
+      </Box>
     </Box>
   );
 };

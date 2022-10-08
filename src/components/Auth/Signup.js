@@ -259,6 +259,7 @@ const Signup = () => {
               children={"Name"}
             ></InputLeftAddon>
             <Input
+              autoFocus
               _placeholder={{ fontSize: { base: "xs", md: "lg" } }}
               borderWidth={3}
               placeholder="Enter your name here"

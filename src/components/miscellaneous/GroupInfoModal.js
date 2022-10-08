@@ -23,6 +23,8 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
+  InputGroup,
+  InputRightElement,
 } from "@chakra-ui/react";
 import { EditIcon, CloseIcon, CheckIcon } from "@chakra-ui/icons";
 import ProfileModal from "../miscellaneous/ProfileModal";
@@ -33,20 +35,60 @@ import { useNavigate } from "react-router-dom";
 const GroupInfoModal = ({ children }) => {
   const navigate = useNavigate();
   const { selectedChat, setSelectedChat, user } = React.useContext(ChatContext);
+  const [leaveLoading, setLeaveLoading] = React.useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [groupChatName, setGroupChatName] = React.useState("");
+  const [length, setLength] = React.useState(15);
   const [search, setSearch] = React.useState("");
   const [searchResult, setSearchResult] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [renameLoading, setRenameLoading] = React.useState(false);
   const toast = useToast();
   const handleRemove = async (userId) => {
-    if (user.userId !== userId) {
+    if (user.userId !== userId && selectedChat.users.length <= 3) {
+      toast({
+        title: "Cannot remove!",
+        description: "Group must have atleast three members!",
+        duration: 5000,
+        isClosable: true,
+        status: "error",
+        position: "top-left",
+      });
+      return;
+    }
+    const { data } = await axios.put(
+      "/api/chat/removeFromGroup",
+      {
+        chatId: selectedChat._id,
+        userId,
+        self: user.userId,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          authorisation: localStorage.getItem("Auth"),
+        },
+      }
+    );
+    toast({
+      title: await data.message,
+      duration: 5000,
+      isClosable: true,
+      status: (await data.success) ? "success" : "error",
+      position: "top-left",
+    });
+    navigate("/");
+    if (await data.success) setSelectedChat(await data.result);
+  };
+  const handleRename = async () => {
+    setRenameLoading(true);
+    if (groupChatName) {
       const { data } = await axios.put(
-        "/api/chat/removeFromGroup",
+        "/api/chat/renameGroup",
         {
           chatId: selectedChat._id,
-          userId,
+          chatName: groupChatName,
         },
         {
           headers: {
@@ -64,21 +106,18 @@ const GroupInfoModal = ({ children }) => {
         position: "top-left",
       });
       navigate("/");
-      if (await data.success) setSelectedChat(await data.result);
-    } else {
-      toast({
-        title: "Cannot remove yourself",
-        duration: 5000,
-        isClosable: true,
-        status: "error",
-        position: "top-left",
-      });
+      if (await data.success) {
+        setSelectedChat(await data.result);
+      }
     }
+    setRenameLoading(false);
+    toggleEditName();
   };
 
   const [isEditable, setIsEditable] = React.useState(false);
   const toggleEditName = () => {
     setIsEditable(!isEditable);
+    setGroupChatName(selectedChat.name);
   };
   return (
     <>
@@ -90,7 +129,14 @@ const GroupInfoModal = ({ children }) => {
       >
         {children}
       </Box>
-      <Modal isCentered isOpen={isOpen} onClose={onClose}>
+      <Modal
+        isCentered
+        isOpen={isOpen}
+        onClose={() => {
+          onClose();
+          setIsEditable(false);
+        }}
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader
@@ -102,22 +148,25 @@ const GroupInfoModal = ({ children }) => {
           >
             {" "}
             {isEditable ? (
-              <Input
-                mt={5}
-                autoFocus
-                width={"70%"}
-                fontFamily={"ubuntu,sans"}
-                fontSize={"2xl"}
-                borderWidth={3}
-                padding={5}
-                value={groupChatName}
-                placeholder="Edit group name here"
-                onChange={(e) => {
-                  setGroupChatName(e.target.value);
-                }}
-              ></Input>
+              <InputGroup>
+                <Input
+                  mt={5}
+                  autoFocus
+                  width={"100%"}
+                  fontFamily={"ubuntu,sans"}
+                  fontSize={"2xl"}
+                  borderWidth={3}
+                  padding={5}
+                  value={groupChatName}
+                  placeholder="Edit group name here"
+                  onChange={(e) => {
+                    setGroupChatName(e.target.value.slice(0, 15));
+                    setLength(e.target.value.slice(0, 15).length);
+                  }}
+                ></Input>
+              </InputGroup>
             ) : (
-              <>{selectedChat.name}</>
+              <Text mt={5}>{selectedChat.name}</Text>
             )}
             {!isEditable ? (
               <IconButton
@@ -133,7 +182,19 @@ const GroupInfoModal = ({ children }) => {
             ) : (
               <>
                 {" "}
-                <IconButton mt={5} padding={3} colorScheme={"green"} ml={3}>
+                <IconButton
+                  isLoading={renameLoading}
+                  disabled={
+                    !groupChatName || selectedChat.name === groupChatName
+                  }
+                  mt={5}
+                  padding={4}
+                  colorScheme={"green"}
+                  ml={3}
+                  onClick={() => {
+                    handleRename();
+                  }}
+                >
                   <CheckIcon fontSize={"lg"} />
                 </IconButton>
                 <IconButton
@@ -141,7 +202,7 @@ const GroupInfoModal = ({ children }) => {
                   onClick={() => {
                     toggleEditName();
                   }}
-                  padding={3}
+                  padding={4}
                   colorScheme={"red"}
                   ml={3}
                 >
@@ -177,7 +238,7 @@ const GroupInfoModal = ({ children }) => {
                         pl={5}
                         pr={5}
                       >
-                        Group Members
+                        Group Members {"  "} {`(${selectedChat.users.length})`}
                       </Text>
                     </Box>
                     <AccordionIcon />
@@ -221,6 +282,19 @@ const GroupInfoModal = ({ children }) => {
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={onClose}>
               Done
+            </Button>
+            <Button
+              isLoading={leaveLoading}
+              loadingText="Leaving Group"
+              onClick={() => {
+                setLeaveLoading(true);
+                handleRemove(user.userId);
+                setLeaveLoading(false);
+              }}
+              colorScheme="red"
+              mr={3}
+            >
+              Leave group
             </Button>
           </ModalFooter>
         </ModalContent>

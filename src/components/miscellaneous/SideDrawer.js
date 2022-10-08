@@ -41,7 +41,7 @@ const SideDrawer = () => {
     setFetchAgain,
   } = React.useContext(ChatContext);
   const navigate = useNavigate();
-
+  const [load, setLoad] = React.useState(false);
   const [search, setSearch] = React.useState();
   const [searchResults, setSearchResults] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
@@ -63,15 +63,11 @@ const SideDrawer = () => {
 
     window.location.reload();
   };
-  const handleSearch = async () => {
-    if (!search) {
-      return toast({
-        title: "Enter something to search",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-        position: "top-left",
-      });
+  const handleSearch = async (query) => {
+    setLoad(true);
+    setSearch(query);
+    if (!query) {
+      return;
     }
     try {
       setLoading(true);
@@ -87,18 +83,8 @@ const SideDrawer = () => {
       if (data.success && data.users.length > 0) {
         setText(" ");
         setSearchResults(await data.users);
-        setLoading(false);
-      } else {
-        toast({
-          title: await data.message,
-          status: (await data.success) ? "success" : "error",
-          duration: 5000,
-          isClosable: true,
-          position: "top-left",
-        });
-        setLoading(false);
-        setText("Couldn't Search !");
       }
+      setLoading(false);
     } catch (err) {
       return toast({
         title: err.message,
@@ -108,7 +94,9 @@ const SideDrawer = () => {
         position: "top-left",
       });
     }
+    setLoad(false);
   };
+
   const accessChat = async (selectedUserId) => {
     console.log(user.userId);
     console.log(selectedUserId);
@@ -151,7 +139,6 @@ const SideDrawer = () => {
       width={"100%"}
       padding={"0.4rem 0.7rem"}
       borderWidth={"0.3rem"}
-      borderInner
     >
       <Tooltip label="Search Users to chat" hasArrow placement="bottom">
         <Button variant="ghost" onClick={onOpen}>
@@ -226,7 +213,12 @@ const SideDrawer = () => {
       <Drawer
         className="drawer"
         placement="left"
-        onClose={onClose}
+        onClose={() => {
+          onClose();
+          setSearchResults([]);
+          setSearch("");
+          setLoad(false);
+        }}
         isOpen={isOpen}
       >
         <DrawerOverlay />
@@ -238,31 +230,50 @@ const SideDrawer = () => {
           <DrawerBody>
             <Box display={"flex"} flexDirection={"row"}>
               <Input
+                autoFocus
                 placeholder="Search by name or email."
                 mr={"2"}
-                value={search}
                 onChange={(e) => {
-                  setSearch(e.target.value);
+                  handleSearch(e.target.value);
                 }}
+                mb={1}
+                value={search}
               />
-              <Button onClick={handleSearch}>Go</Button>
+              {/* <Button isLoading={load} onClick={handleSearch}>
+                Go
+              </Button> */}
             </Box>
-            {loading ? (
-              <SkeletonComponent />
-            ) : searchResults.length > 0 ? (
-              searchResults.map((searchResult) => {
-                return (
-                  <UserList
-                    user={searchResult}
-                    handleClick={() => {
-                      accessChat(searchResult._id);
-                    }}
-                  />
-                );
-              })
-            ) : (
-              <span>{text}</span>
-            )}
+            <Box>
+              {!loading ? (
+                search?.length > 0 ? (
+                  <Box
+                    padding={5}
+                    display={"flex"}
+                    flexDir={"column"}
+                    width={"100%"}
+                    height={"100%"}
+                    // maxHeight={"40vh"}
+                  >
+                    {searchResults?.map((user) => {
+                      return (
+                        <UserList
+                          user={user}
+                          handleClick={() => {
+                            accessChat(user._id);
+                          }}
+                        />
+                      );
+                    })}
+                  </Box>
+                ) : (
+                  <></>
+                )
+              ) : (
+                <>
+                  <SkeletonComponent />
+                </>
+              )}{" "}
+            </Box>
           </DrawerBody>
         </DrawerContent>
       </Drawer>

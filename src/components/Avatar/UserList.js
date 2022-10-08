@@ -1,6 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import React from "react";
+import ChatContext from "../contexts/chats/ChatContext";
 import { Avatar, Box, Text } from "@chakra-ui/react";
-const UserList = ({ user, handleClick }) => {
+import SelectedChat from "../chat/SelectedChat";
+const UserList = ({ user, handleClick, isEditing }) => {
+  const { selectedChat } = React.useContext(ChatContext);
   return (
     <div>
       <Box
@@ -16,6 +21,12 @@ const UserList = ({ user, handleClick }) => {
         alignItems={"center"}
         color={"black"}
         borderRadius={"lg"}
+        hidden={
+          isEditing &&
+          selectedChat.users.some((elem) => {
+            return JSON.stringify(user) === JSON.stringify(elem);
+          })
+        }
       >
         <Avatar mr={2} size={"sm"} name={user.name} cursor={"pointer"}></Avatar>
         <Box>

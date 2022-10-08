@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React, { useContext } from "react";
 import ChatContext from "../contexts/chats/ChatContext";
@@ -6,8 +7,14 @@ import MyChats from "../chat/MyChats";
 import ChatBox from "../chat/ChatBox";
 import { Box } from "@chakra-ui/react";
 const Chat = () => {
-  const { LoggedIn, setLoggedIn } = useContext(ChatContext);
-  
+  const {
+    LoggedIn,
+
+    selectedChat,
+
+    setChatID,
+  } = useContext(ChatContext);
+
   return (
     <Box
       width={"100%"}
@@ -19,7 +26,7 @@ const Chat = () => {
       <Box
         display={"flex"}
         width={"100%"}
-        height={"85%"}
+        height={{ base: "100%", md: "85%" }}
         justifyContent={"space-between"}
         alignItems={"center"}
         padding={"0.5rem"}

@@ -50,7 +50,7 @@ const MyChats = () => {
     }
   };
   const getSender = (user, users) => {
-    return users[0]._id === user.userId ? users[1].name : users[0].name;
+    return users[0]?._id === user.userId ? users[1]?.name : users[0]?.name;
   };
   React.useEffect(() => {
     fetchChats();
@@ -82,7 +82,7 @@ const MyChats = () => {
         <Text fontSize={"3xl"} fontFamily={"ubuntu, sans"}>
           Chatter
         </Text>
-        <CreateGroupModal>
+        <CreateGroupModal isEditing={false}>
           <Button
             fontFamily={"ubuntu, sans"}
             display={"flex"}
@@ -126,7 +126,7 @@ const MyChats = () => {
                           mr={3}
                           name={
                             !chat?.isGroup
-                              ? getSender(user, chat.users)
+                              ? getSender(user, chat?.users)
                               : chat.name
                           }
                           size={"sm"}
