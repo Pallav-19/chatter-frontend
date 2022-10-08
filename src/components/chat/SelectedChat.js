@@ -5,7 +5,9 @@ import { Box, IconButton, Text } from "@chakra-ui/react";
 import { ArrowBackIcon, InfoIcon, ViewIcon } from "@chakra-ui/icons";
 import ProfileModal from "../miscellaneous/ProfileModal";
 import GroupInfoModal from "../miscellaneous/GroupInfoModal";
+import { useColorMode } from "@chakra-ui/react";
 const SelectedChat = () => {
+  const { colorMode } = useColorMode();
   const { selectedChat, setSelectedChat, user } = React.useContext(ChatContext);
   const getSender = (user, users) => {
     return users[0]._id === user.userId ? users[1].name : users[0].name;
@@ -67,7 +69,7 @@ const SelectedChat = () => {
           <Box
             width={"100%"}
             height={"83%"}
-            bg={"#ffffff14"}
+            bg={colorMode==="light"?"#e8e8e8":"#ffffff14"}
             borderRadius={"lg"}
           ></Box>
         </Box>

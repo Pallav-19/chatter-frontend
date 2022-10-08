@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import React from "react";
@@ -19,11 +20,18 @@ import {
 import { ViewIcon } from "@chakra-ui/icons";
 import ChatContext from "../contexts/chats/ChatContext";
 const ProfileModal = ({ userReceived, children }) => {
+  let id;
+  if (userReceived.userId) {
+    id = userReceived.userId;
+  }
+  if (userReceived._id) {
+    id = userReceived._id;
+  }
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { user } = React.useContext(ChatContext);
   React.useEffect(() => {
     console.log(user);
-    console.log(userReceived);
+    console.log(id);
   }, []);
   return (
     <div>
@@ -39,7 +47,7 @@ const ProfileModal = ({ userReceived, children }) => {
           ></IconButton>
         </span>
       )}
-      <Modal isCentered isOpen={isOpen} onClose={onClose}  size={"lg"}>
+      <Modal isCentered isOpen={isOpen} onClose={onClose} size={"lg"}>
         <ModalOverlay />
         <ModalContent>
           <ModalCloseButton />
@@ -69,7 +77,6 @@ const ProfileModal = ({ userReceived, children }) => {
               ></Avatar>
             )}
             <ModalHeader
-              
               fontFamily={"ubuntu , sans"}
               fontSize={"2rem"}
               textAlign={"center"}
@@ -77,16 +84,12 @@ const ProfileModal = ({ userReceived, children }) => {
               {userReceived?.name}
             </ModalHeader>
             <Text fontFamily={"ubuntu,sans"} fontSize="1rem">
-              Email: {userReceived.email}
+              <b>Email:</b> {userReceived.email}
             </Text>
           </ModalBody>
 
           <ModalFooter>
-            <Button
-              display={user === userReceived ? "flex" : "none"}
-              colorScheme="blue"
-              mr={3}
-            >
+            <Button hidden={!(id == user.userId)} colorScheme="blue" mr={3}>
               Edit Profile
             </Button>
             <Button onClick={onClose} variant="ghost">

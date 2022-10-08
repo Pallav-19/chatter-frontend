@@ -32,6 +32,7 @@ const CreateGroupModal = ({ children }) => {
   const [search, setSearch] = React.useState();
   const [loading, setLoading] = React.useState(false);
   const [text, setText] = React.useState(" ");
+  const [createLoading, setCreateLoading] = React.useState(false);
   const { chats, setChats } = React.useContext(ChatContext);
   const handleSearch = async (query) => {
     setSearch(query);
@@ -84,6 +85,7 @@ const CreateGroupModal = ({ children }) => {
     setSelectedUsers([...filtered]);
   };
   const handleSubmit = async () => {
+    setCreateLoading(true);
     if (!selectedUsers) {
       toast({
         title: "Select Users!",
@@ -104,13 +106,13 @@ const CreateGroupModal = ({ children }) => {
       });
     }
     if (groupName && selectedUsers) {
-      console.log(JSON.stringify(selectedUsers.map((u) => u._id)));
+      console.log(JSON.stringify(selectedUsers?.map((u) => u._id)));
       try {
         const { data } = await axios.post(
           "/api/chat/createGroup",
           {
             name: groupName,
-            users: selectedUsers.map((u) => u._id),
+            users: selectedUsers?.map((u) => u._id),
           },
           {
             headers: {
@@ -133,7 +135,7 @@ const CreateGroupModal = ({ children }) => {
           setChats([await data.group, ...chats]);
           onClose();
           setGroupName("");
-          setSelectedUsers("");
+          setSelectedUsers([]);
           setSearch("");
         }
         navigate("/");
@@ -147,6 +149,7 @@ const CreateGroupModal = ({ children }) => {
         });
       }
     }
+    setCreateLoading(false);
   };
   return (
     <>
@@ -235,6 +238,8 @@ const CreateGroupModal = ({ children }) => {
           </Box>
           <ModalFooter>
             <Button
+              isLoading={createLoading}
+              loadingText={"Creating"}
               colorScheme="blue"
               mr={3}
               onClick={() => {

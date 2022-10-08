@@ -52,6 +52,16 @@ const SideDrawer = () => {
   const logout = () => {
     localStorage.removeItem("Auth");
     navigate("/");
+
+    toast({
+      status: "success",
+      isClosable: true,
+      position: "top-left",
+      title: "You have been logged out!",
+      duration: 5000,
+    });
+
+    window.location.reload();
   };
   const handleSearch = async () => {
     if (!search) {

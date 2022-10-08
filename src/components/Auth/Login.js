@@ -235,7 +235,7 @@ const Login = () => {
     }
 
     if (errorCount === 0) {
-      const { data } = await axios.patch("/api/auth/changePassword", {
+      const { data } = await axios.put("/api/auth/changePassword", {
         newpassword,
         email,
       });
