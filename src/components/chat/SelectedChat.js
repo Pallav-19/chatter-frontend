@@ -4,6 +4,9 @@ import React from "react";
 import ChatContext from "../contexts/chats/ChatContext";
 import ScrollableFeed from "react-scrollable-feed";
 import { Avatar, Tooltip } from "@chakra-ui/react";
+import io from "socket.io-client";
+import Lottie from "lottie-react";
+import typingLottie from "../../Animations/typing.json";
 import {
   Box,
   Button,
@@ -20,6 +23,7 @@ import ProfileModal from "../miscellaneous/ProfileModal";
 import GroupInfoModal from "../miscellaneous/GroupInfoModal";
 import { useColorMode } from "@chakra-ui/react";
 import CreateGroupModal from "../miscellaneous/CreateGroupModal";
+let socket, compareChat;
 const SelectedChat = () => {
   const toast = useToast();
   const { colorMode } = useColorMode();
@@ -27,6 +31,10 @@ const SelectedChat = () => {
   const [messages, setMessages] = React.useState([]);
   const [newMessage, setNewMessage] = React.useState("");
   const [loading, setLoading] = React.useState(false);
+  const [socketState, setSocketState] = React.useState(false);
+  const [typing, setTyping] = React.useState(false);
+  const [isTyping, setIsTyping] = React.useState(false);
+  const [typer, setTyper] = React.useState("");
   const getSender = (user, users) => {
     return users[0]._id === user.userId ? users[1].name : users[0].name;
   };
@@ -35,9 +43,38 @@ const SelectedChat = () => {
   };
   const TypingHandler = async (e) => {
     setNewMessage(e.target.value);
+    if (!socketState && newMessage?.length < 0) return;
+    if (!typing) {
+      setTyping(true);
+      socket.emit("typing", selectedChat._id);
+    }
+    let lastTyping = new Date().getTime();
+    let timeout = 2000;
+    setTimeout(() => {
+      if (new Date().getTime() - lastTyping >= timeout && typing) {
+        socket.emit("stop typing", selectedChat._id);
+        setTyping(false);
+      }
+    }, timeout);
   };
+  React.useEffect(() => {
+    socket = io("http://localhost:5000");
+
+    socket.on("connected", () => {
+      setSocketState(true);
+    });
+    socket.emit("setup", user);
+    socket.on("typing", () => {
+      setIsTyping(true);
+    });
+    socket.on("stop typing", () => {
+      setIsTyping(false);
+    });
+  }, []);
   const send = async () => {
+    if (!newMessage) return;
     setNewMessage("");
+    socket.emit("stop typing", selectedChat._id);
     const { data } = await axios.post(
       "/api/message/createMessage",
       {
@@ -54,6 +91,7 @@ const SelectedChat = () => {
     );
     if (await data.success) {
       setMessages([...messages, await data.newMessage]);
+      socket.emit("new message", await data.newMessage);
     } else {
       toast({
         title: await data.message,
@@ -92,10 +130,20 @@ const SelectedChat = () => {
       });
     }
     setLoading(false);
+    socket.emit("join chat", selectedChat._id);
   };
   React.useEffect(() => {
     getMessages();
+    compareChat = selectedChat;
   }, [selectedChat]);
+  React.useEffect(() => {
+    socket.on("message received", (newMessage) => {
+      if (!compareChat || compareChat._id !== newMessage.chat._id) {
+      } else {
+        setMessages([...messages, newMessage]);
+      }
+    });
+  });
   return (
     <>
       {selectedChat ? (
@@ -198,13 +246,15 @@ const SelectedChat = () => {
                 >
                   {messages.length < 1 ? (
                     <Box
+                      width={"50%"}
                       textAlign={"center"}
-                      bg={"grey"}
-                      padding={2}
+                      bg={"teal"}
+                      padding={1}
                       fontFamily={"ubuntu,sans"}
                       borderRadius={"lg"}
-                      color={"black"}
-                      fontSize={"sm"}
+                      color={"whiteAlpha.900"}
+                      fontSize={"xs"}
+                      // justifySelf={"flex-start"}
                     >
                       Messages are end to end encrypted and safe with chatter!
                       start chatting safely!
@@ -260,15 +310,15 @@ const SelectedChat = () => {
                                 fontSize={"sm"}
                                 color={
                                   m.sender._id === user.userId
-                                    ? "black"
-                                    : "black"
+                                    ? "white"
+                                    : "blackAlpha.800"
                                 }
                                 borderRadius={"lg"}
                                 maxWidth={"50vw"}
                                 bg={
                                   m.sender._id === user.userId
-                                    ? "blue.100"
-                                    : "green.100"
+                                    ? "blue.500"
+                                    : "blue.100"
                                 }
                               >
                                 {m.content}
@@ -278,6 +328,23 @@ const SelectedChat = () => {
                         })}
                       </ScrollableFeed>
                     </Box>
+                  )}
+                  {isTyping ? (
+                    <Box
+                      // visibility={typer !== user ? "visible" : "hidden"}
+                      bg={"transparent"}
+                      flexDirection={"row"}
+                      alignItems={"center"}
+                      justifyContent={"flex-start"}
+                      width={"100%"}
+                      padding={4}
+                      pb={0}
+                      display={"flex"}
+                    >
+                      <Avatar size={"sm"} />
+                    </Box>
+                  ) : (
+                    <></>
                   )}
                 </Box>
               ) : (
@@ -323,7 +390,7 @@ const SelectedChat = () => {
                     send();
                   }}
                   type="submit"
-                  colorScheme={""}
+                  colorScheme={"pink"}
                   borderRadius={"lg"}
                 >
                   <i class="fa-solid fa-arrow-right"></i>

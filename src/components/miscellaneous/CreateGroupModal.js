@@ -210,6 +210,7 @@ const CreateGroupModal = ({ children, isEditing }) => {
         isCentered
         isOpen={isOpen}
         onClose={() => {
+          onClose();
           setLoading(false);
         }}
       >

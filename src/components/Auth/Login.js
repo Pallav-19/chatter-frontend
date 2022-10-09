@@ -94,7 +94,7 @@ const Login = () => {
 
     if (errorCount === 0) {
       const response = await axios.post(
-        "http://localhost:5100/api/auth/login ",
+        "http://localhost:5000/api/auth/login ",
         { email, password },
         {
           headers: {
