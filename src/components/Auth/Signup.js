@@ -253,7 +253,7 @@ const Signup = () => {
       <Stack spacing={10}>
         <FormControl>
           <InputGroup mb={6} mt={4}>
-            <InputLeftAddon
+             <InputLeftAddon display={{ base: "none", md: "flex" }}
               fontFamily={"ubuntu,sans"}
               fontSize={{ base: "xs", md: "lg" }}
               children={"Name"}
@@ -273,7 +273,7 @@ const Signup = () => {
           </InputGroup>
 
           <InputGroup mb={6}>
-            <InputLeftAddon
+             <InputLeftAddon display={{ base: "none", md: "flex" }}
               fontFamily={"ubuntu,sans"}
               fontSize={{ base: "xs", md: "lg" }}
               children={"Email Address"}
@@ -294,7 +294,7 @@ const Signup = () => {
           {/* <FormLabel>Password</FormLabel> */}
 
           <InputGroup mb={6}>
-            <InputLeftAddon
+             <InputLeftAddon display={{ base: "none", md: "flex" }}
               fontFamily={"ubuntu,sans"}
               fontSize={{ base: "xs", md: "lg" }}
               children={"Password"}
@@ -323,7 +323,7 @@ const Signup = () => {
           </InputGroup>
 
           <InputGroup mb={6}>
-            <InputLeftAddon
+             <InputLeftAddon display={{ base: "none", md: "flex" }}
               fontFamily={"ubuntu,sans"}
               fontSize={{ base: "xs", md: "lg" }}
               children={"Confirm Password"}

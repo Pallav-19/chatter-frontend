@@ -264,6 +264,7 @@ const Login = () => {
 
           <InputGroup>
             <InputLeftAddon
+              display={{ base: "none", md: "flex" }}
               fontFamily={"ubuntu,sans"}
               fontSize={{ base: "xs", md: "lg" }}
               children={"Email Address"}
@@ -284,6 +285,7 @@ const Login = () => {
           {/* <FormLabel>Password</FormLabel> */}
           <InputGroup mt={10}>
             <InputLeftAddon
+              display={{ base: "none", md: "flex" }}
               fontFamily={"ubuntu,sans"}
               fontSize={{ base: "xs", md: "lg" }}
               children={"Password"}
@@ -406,6 +408,7 @@ const Login = () => {
                       </ModalHeader>
                       <InputGroup mb={6}>
                         <InputLeftAddon
+                          display={{ base: "none", md: "flex" }}
                           fontFamily={"ubuntu,sans"}
                           fontSize={{ base: "xs", md: "lg" }}
                           children={"Password"}
@@ -435,6 +438,7 @@ const Login = () => {
 
                       <InputGroup mb={6}>
                         <InputLeftAddon
+                          display={{ base: "none", md: "flex" }}
                           fontFamily={"ubuntu,sans"}
                           fontSize={{ base: "xs", md: "lg" }}
                           children={"Confirm  Password"}

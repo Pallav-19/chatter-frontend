@@ -3,7 +3,7 @@
 import ChatContext from "./ChatContext";
 import React from "react";
 import { useToast } from "@chakra-ui/react";
-import parseJwt from "../../../utils/parseJson";
+import parseJwt from "../../../Services/utils/parseJson";
 import { useLocation } from "react-router-dom";
 
 const ChatState = ({ children }) => {

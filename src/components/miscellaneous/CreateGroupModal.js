@@ -61,8 +61,8 @@ const CreateGroupModal = ({ children, isEditing }) => {
       if (data.success && data.users.length > 0) {
         setText(" ");
         setSearchResults(await data.users);
-        setLoading(false);
       }
+      setLoading(false);
     } catch (err) {
       return toast({
         title: err.message,
@@ -206,7 +206,13 @@ const CreateGroupModal = ({ children, isEditing }) => {
   return (
     <>
       <span onClick={onOpen}>{children}</span>
-      <Modal isCentered isOpen={isOpen} onClose={onClose}>
+      <Modal
+        isCentered
+        isOpen={isOpen}
+        onClose={() => {
+          setLoading(false);
+        }}
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader
@@ -233,7 +239,10 @@ const CreateGroupModal = ({ children, isEditing }) => {
                     setLength(15 - e.target.value.slice(0, 15).length);
                   }}
                 ></Input>
-                <InputRightAddon children={length}></InputRightAddon>
+                <InputRightAddon
+                  hidden={isEditing}
+                  children={length}
+                ></InputRightAddon>
               </InputGroup>
             </FormControl>
             <FormControl>
@@ -323,6 +332,7 @@ const CreateGroupModal = ({ children, isEditing }) => {
                 setGroupName("");
                 setSearch("");
                 setCreateLoading(false);
+                setLoading(false);
               }}
               colorScheme={"red"}
             >

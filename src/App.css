@@ -3,11 +3,29 @@
   display: flex;
   width: 100vw;
   height: 100vh;
- 
 }
 body {
   /* height: 100vh; */
   font-family: "Ubuntu", sans-serif;
-
+  overflow-x: hidden;
   /* width: 100vw; */
+}
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4rem;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #2196f3;
 }

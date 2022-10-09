@@ -38,12 +38,11 @@ const GroupInfoModal = ({ children }) => {
   const [leaveLoading, setLeaveLoading] = React.useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [groupChatName, setGroupChatName] = React.useState("");
-  const [length, setLength] = React.useState(15);
-  const [search, setSearch] = React.useState("");
-  const [searchResult, setSearchResult] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
+  const [length, setLength] = React.useState(selectedChat.name.length);
+
   const [renameLoading, setRenameLoading] = React.useState(false);
   const toast = useToast();
+
   const handleRemove = async (userId) => {
     if (user.userId !== userId && selectedChat.users.length <= 3) {
       toast({
@@ -213,6 +212,11 @@ const GroupInfoModal = ({ children }) => {
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
+            {isEditable && (
+              <Text textAlign={"right"} width={"70%"} mt={-7}>{`${
+                15 - length
+              }/15`}</Text>
+            )}
             <Text textAlign={"right"} mb={4}>
               Created on :{"   "}
               <b>
@@ -246,8 +250,10 @@ const GroupInfoModal = ({ children }) => {
                 </h2>
                 <AccordionPanel pb={4}>
                   <Box
-                    pl={5}
-                    pr={5}
+                    pl={1}
+                    pr={1}
+                    maxHeight={"35vh"}
+                    overflowY={"scroll"}
                     display={"flex"}
                     width={"100%"}
                     flexWrap={"wrap"}

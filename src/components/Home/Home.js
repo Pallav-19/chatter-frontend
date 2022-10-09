@@ -34,7 +34,7 @@ const Home = () => {
           transform={"translate(-50%,-50%)"}
           borderRadius={"lg"}
           boxShadow={"1px 1px 2px rgba(0, 0, 0, 0.444)"}
-          height={"90vh"}
+          height={{ base: "65%", md: "90%" }}
         >
           <TabList>
             <Tab fontFamily={"ubuntu,sans"} fontSize={"xl"} width={"50%"}>
@@ -55,18 +55,20 @@ const Home = () => {
           </TabPanels>
         </Tabs>
       )}
-      <Box
-        position={"absolute"}
-        right={"0"}
-        bottom={"10%"}
-        width={"4rem"}
-        height={"2rem"}
-      >
-        <IconButton
-          onClick={toggleColorMode}
-          icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-        />
-      </Box>
+      {!LoggedIn && (
+        <Box
+          position={"absolute"}
+          right={"0"}
+          bottom={"10%"}
+          width={"4rem"}
+          height={"2rem"}
+        >
+          <IconButton
+            onClick={toggleColorMode}
+            icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+          />
+        </Box>
+      )}
     </Box>
   );
 };
