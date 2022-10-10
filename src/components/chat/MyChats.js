@@ -25,7 +25,7 @@ const MyChats = () => {
   const fetchChats = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get("/api/chat/getChats", {
+      const { data } = await axios.get("https://chatter-nfu0.onrender.com/api/chat/getChats", {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",

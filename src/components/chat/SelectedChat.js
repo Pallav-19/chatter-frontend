@@ -85,7 +85,7 @@ const SelectedChat = () => {
     setNewMessage("");
     socket.emit("stop typing", selectedChat._id, user.name);
     const { data } = await axios.post(
-      "/api/message/createMessage",
+      "https://chatter-nfu0.onrender.com/api/message/createMessage",
       {
         chatId: selectedChat._id,
         content: newMessage,
@@ -118,7 +118,7 @@ const SelectedChat = () => {
     }
     setLoading(true);
     const { data } = await axios.get(
-      `/api/message/getMessages/${selectedChat._id}`,
+      `https://chatter-nfu0.onrender.com/api/message/getMessages/${selectedChat._id}`,
 
       {
         headers: {

@@ -56,7 +56,7 @@ const GroupInfoModal = ({ children }) => {
       return;
     }
     const { data } = await axios.put(
-      "/api/chat/removeFromGroup",
+      "https://chatter-nfu0.onrender.com/api/chat/removeFromGroup",
       {
         chatId: selectedChat._id,
         userId,
@@ -85,7 +85,7 @@ const GroupInfoModal = ({ children }) => {
     setRenameLoading(true);
     if (groupChatName) {
       const { data } = await axios.put(
-        "/api/chat/renameGroup",
+        "https://chatter-nfu0.onrender.com/api/chat/renameGroup",
         {
           chatId: selectedChat._id,
           chatName: groupChatName,

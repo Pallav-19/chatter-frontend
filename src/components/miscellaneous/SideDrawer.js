@@ -77,7 +77,7 @@ const SideDrawer = () => {
       setLoading(true);
       setText(" ");
 
-      const { data } = await axios.get(`/api/user/allUsers?search=${search}`, {
+      const { data } = await axios.get(`https://chatter-nfu0.onrender.com/api/user/allUsers?search=${search}`, {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
@@ -110,7 +110,7 @@ const SideDrawer = () => {
     try {
       setLoadingChat(true);
       const { data } = await axios.post(
-        `/api/chat/accessChat`,
+        `https://chatter-nfu0.onrender.com/api/chat/accessChat`,
         { userId: selectedUserId },
         {
           headers: {
