@@ -30,8 +30,8 @@ const ProfileModal = ({ userReceived, children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { user } = React.useContext(ChatContext);
   React.useEffect(() => {
-    console.log(user);
-    console.log(id);
+    //console.log(user);
+    //console.log(id);
   }, []);
   return (
     <div>

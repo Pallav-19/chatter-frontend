@@ -172,82 +172,111 @@ const Signup = () => {
   };
   const verify = async () => {
     setVerifyLoading(true);
-    if (inputOTP == outputOTP) {
-      const response = await axios.post(
-        "https://chatter-nfu0.onrender.com/api/auth/signup",
-        { name, email, password },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            Accept: "application/json",
-          },
+    if (inputOTP.length === 3) {
+      if (inputOTP == outputOTP) {
+        const response = await axios.post(
+          "https://chatter-nfu0.onrender.com/api/auth/signup",
+          { name, email, password },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              Accept: "application/json",
+            },
+          }
+        );
+        toast({
+          title: await response.data.message,
+          status: (await response.data.success) ? "success" : "error",
+          duration: 5000,
+          isClosable: true,
+          position: "top-left",
+        });
+        if (await response.data.success) {
+          setVerifyLoading(false);
+
+          setConfirmPassword("");
+          setEmail("");
+          setName("");
+          setPassword("");
+          localStorage.setItem("Auth", await response.data.token);
+          navigate("/");
         }
-      );
-      toast({
-        title: await response.data.message,
-        status: (await response.data.success) ? "success" : "error",
-        duration: 5000,
-        isClosable: true,
-        position: "top-left",
-      });
-      if (await response.data.success) {
-        setConfirmPassword("");
-        setEmail("");
-        setName("");
-        setPassword("");
-        localStorage.setItem("Auth", await response.data.token);
-        navigate("/");
+      } else {
+        toast({
+          title: "OTP did not match!",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "top-left",
+        });
+        setVerifyLoading(false);
       }
     } else {
       toast({
-        title: "OTP did not match!",
+        title: "Enter 3 digit OTP",
         status: "error",
         duration: 5000,
         isClosable: true,
         position: "top-left",
       });
+      setVerifyLoading(false);
     }
     setVerifyLoading(false);
   };
   const resend = async () => {
     setResendLoading(true);
-    if (inputOTP == outputOTP) {
-      const response = await axios.post(
-        "https://chatter-nfu0.onrender.com/api/auth/signup",
-        { name, email, password },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            Accept: "application/json",
-          },
+    if (inputOTP.length === 3) {
+      if (inputOTP == outputOTP) {
+        const response = await axios.post(
+          "https://chatter-nfu0.onrender.com/api/auth/signup",
+          { name, email, password },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+              Accept: "application/json",
+            },
+          }
+        );
+        toast({
+          title: await response.data.message,
+          status: (await response.data.success) ? "success" : "error",
+          duration: 5000,
+          isClosable: true,
+          position: "top-left",
+        });
+        if (await response.data.success) {
+          setResendLoading(false);
+
+          setConfirmPassword("");
+          setEmail("");
+          setName("");
+          setPassword("");
+          localStorage.setItem("Auth", await response.data.token);
+          navigate("/");
         }
-      );
-      toast({
-        title: await response.data.message,
-        status: (await response.data.success) ? "success" : "error",
-        duration: 5000,
-        isClosable: true,
-        position: "top-left",
-      });
-      if (await response.data.success) {
-        setConfirmPassword("");
-        setEmail("");
-        setName("");
-        setPassword("");
-        localStorage.setItem("Auth", await response.data.token);
-        navigate("/");
+      } else {
+        toast({
+          title: "OTP did not match!",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "top-left",
+        });
+        setResendLoading(false);
       }
     } else {
       toast({
-        title: "OTP did not match!",
+        title: "Enter 3 digit OTP",
         status: "error",
         duration: 5000,
         isClosable: true,
         position: "top-left",
       });
+      setResendLoading(false);
     }
+
     setResendLoading(false);
   };
   return (
@@ -256,7 +285,8 @@ const Signup = () => {
       <Stack spacing={10}>
         <FormControl>
           <InputGroup mb={6} mt={4}>
-             <InputLeftAddon display={{ base: "none", md: "flex" }}
+            <InputLeftAddon
+              display={{ base: "none", md: "flex" }}
               fontFamily={"ubuntu,sans"}
               fontSize={{ base: "xs", md: "lg" }}
               children={"Name"}
@@ -276,7 +306,8 @@ const Signup = () => {
           </InputGroup>
 
           <InputGroup mb={6}>
-             <InputLeftAddon display={{ base: "none", md: "flex" }}
+            <InputLeftAddon
+              display={{ base: "none", md: "flex" }}
               fontFamily={"ubuntu,sans"}
               fontSize={{ base: "xs", md: "lg" }}
               children={"Email Address"}
@@ -297,7 +328,8 @@ const Signup = () => {
           {/* <FormLabel>Password</FormLabel> */}
 
           <InputGroup mb={6}>
-             <InputLeftAddon display={{ base: "none", md: "flex" }}
+            <InputLeftAddon
+              display={{ base: "none", md: "flex" }}
               fontFamily={"ubuntu,sans"}
               fontSize={{ base: "xs", md: "lg" }}
               children={"Password"}
@@ -326,7 +358,8 @@ const Signup = () => {
           </InputGroup>
 
           <InputGroup mb={6}>
-             <InputLeftAddon display={{ base: "none", md: "flex" }}
+            <InputLeftAddon
+              display={{ base: "none", md: "flex" }}
               fontFamily={"ubuntu,sans"}
               fontSize={{ base: "xs", md: "lg" }}
               children={"Confirm Password"}
@@ -389,7 +422,7 @@ const Signup = () => {
                     value={inputOTP}
                     onChange={(value) => {
                       setInputOTP(value);
-                      console.log(inputOTP);
+                      //console.log(inputOTP);
                     }}
                   >
                     {/* <PinInputField border={"2px solid"} /> */}

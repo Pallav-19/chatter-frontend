@@ -37,7 +37,7 @@ const MyChats = () => {
         }
       );
       if ((await data.length) > 0) {
-        console.log(await data);
+        //console.log(await data);
         setChats(await data);
       }
       setLoading(false);
@@ -57,7 +57,7 @@ const MyChats = () => {
   };
   React.useEffect(() => {
     fetchChats();
-    console.log(chats);
+    //console.log(chats);
   }, [useLocation()]);
   return (
     <Box

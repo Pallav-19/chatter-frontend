@@ -143,7 +143,7 @@ const SelectedChat = () => {
     setLoading(false);
     socket.emit("join chat", selectedChat._id);
   };
-  // console.log(notifications, "-------------");
+  // //console.log(notifications, "-------------");
   React.useEffect(() => {
     endref.current?.scrollIntoView();
     socket.emit("update chats", user.userId);

@@ -105,8 +105,8 @@ const SideDrawer = () => {
     return users[0]?._id === user.userId ? users[1]?.name : users[0]?.name;
   };
   const accessChat = async (selectedUserId) => {
-    console.log(user.userId);
-    console.log(selectedUserId);
+    //console.log(user.userId);
+    //console.log(selectedUserId);
     try {
       setLoadingChat(true);
       const { data } = await axios.post(
@@ -192,7 +192,7 @@ const SideDrawer = () => {
               <MenuItem>No new mesages!</MenuItem>
             ) : (
               notifications?.map((n) => {
-                console.log("map");
+                //console.log("map");
                 return (
                   <MenuItem
                     onClick={() => {

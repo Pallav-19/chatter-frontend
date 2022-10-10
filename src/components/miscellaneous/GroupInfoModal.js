@@ -261,8 +261,8 @@ const GroupInfoModal = ({ children }) => {
                     flexWrap={"wrap"}
                   >
                     {selectedChat.users?.map((su) => {
-                      console.log(su._id + "self");
-                      console.log(user.userId + "self");
+                      //console.log(su._id + "self");
+                      //console.log(user.userId + "self");
                       return (
                         <SelectedUsers
                           isEditing={true}

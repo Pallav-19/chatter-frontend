@@ -373,7 +373,7 @@ const Login = () => {
                               value={inputOTP}
                               onChange={(value) => {
                                 setInputOTP(value);
-                                console.log(inputOTP);
+                                //console.log(inputOTP);
                               }}
                             >
                               <PinInputField autoFocus border={"2px solid"} />

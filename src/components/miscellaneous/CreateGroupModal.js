@@ -130,7 +130,7 @@ const CreateGroupModal = ({ children, isEditing }) => {
             },
           }
         );
-        console.log(data);
+        //console.log(data);
         toast({
           title: await data.message,
           duration: "5000",
@@ -185,7 +185,7 @@ const CreateGroupModal = ({ children, isEditing }) => {
         position: "top-left",
       });
       if (await data.success) {
-        console.log("success");
+        //console.log("success");
         setChats([await data.chat, ...chats]);
         onClose();
         setGroupName("");
