@@ -25,14 +25,17 @@ const MyChats = () => {
   const fetchChats = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get("https://chatter-nfu0.onrender.com/api/chat/getChats", {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "Access-Control-Allow-Origin": "*",
-          authorisation: localStorage.getItem("Auth"),
-        },
-      });
+      const { data } = await axios.get(
+        "https://chatter-nfu0.onrender.com/api/chat/getChats",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "Access-Control-Allow-Origin": "*",
+            authorisation: localStorage.getItem("Auth"),
+          },
+        }
+      );
       if ((await data.length) > 0) {
         console.log(await data);
         setChats(await data);
@@ -93,78 +96,73 @@ const MyChats = () => {
           </Button>
         </CreateGroupModal>
       </Box>
-   
-        <Box
-          display={"flex"}
-          flexDir={"column"}
-          p={3}
-          bg="#ffffff14"
-          width={"100%"}
-          height={"100%"}
-          overflowY={"hidden"}
-          borderRadius={"lg"}
-        >
-          {chats ? (
-            <>
-              <Stack height={"100%"} width={"100%"} p={1} overflowY={"scroll"}>
-                {chats.map((chat) => {
-                  return (
-                    <Box
-                      height={"100%"}
-                      onClick={() => {
-                        setSelectedChat(chat);
-                      }}
-                      cursor={"pointer"}
-                      bg={selectedChat === chat ? "blue.500" : "#e8e8e8"}
-                      color={selectedChat === chat ? "white" : "black"}
-                      px={3}
-                      py={2}
-                      borderRadius={"lg"}
-                      key={chat._id}
-                    >
+
+      <Box
+        display={"flex"}
+        flexDir={"column"}
+        p={3}
+        bg="#ffffff14"
+        width={"100%"}
+        height={"100%"}
+        overflowY={"hidden"}
+        borderRadius={"lg"}
+      >
+        {chats ? (
+          <>
+            <Stack height={"100%"} width={"100%"} p={1} overflowY={"scroll"}>
+              {chats.map((chat) => {
+                return (
+                  <Box
+                    maxHeight={"15%"}
+                    onClick={() => {
+                      setSelectedChat(chat);
+                    }}
+                    cursor={"pointer"}
+                    bg={selectedChat === chat ? "blue.500" : "#e8e8e8"}
+                    color={selectedChat === chat ? "white" : "black"}
+                    px={3}
+                    py={2}
+                    borderRadius={"lg"}
+                    key={chat._id}
+                  >
+                    <Box height={"100%"} display={"flex"} alignItems={"center"}>
+                      <Avatar
+                        mr={3}
+                        name={
+                          !chat?.isGroup
+                            ? getSender(user, chat?.users)
+                            : chat.name
+                        }
+                        size={"sm"}
+                      />
                       <Box
-                        height={"100%"}
                         display={"flex"}
-                        alignItems={"center"}
+                        flexDirection={"column"}
+                        alignItems={"flex-start"}
+                        justifyContent={"space-between"}
                       >
-                        <Avatar
-                          mr={3}
-                          name={
-                            !chat?.isGroup
-                              ? getSender(user, chat?.users)
-                              : chat.name
-                          }
-                          size={"sm"}
-                        />
-                        <Box
-                          display={"flex"}
-                          flexDirection={"column"}
-                          alignItems={"flex-start"}
-                          justifyContent={"space-between"}
-                        >
-                          <Text>
-                            {!chat?.isGroup
-                              ? getSender(user, chat.users)
-                              : chat.name}
+                        <Text>
+                          {!chat?.isGroup
+                            ? getSender(user, chat.users)
+                            : chat.name}
+                        </Text>
+                        {chat?.lastMessage && (
+                          <Text fontWeight={"600"} fontSize={"xs"}>
+                            {chat?.lastMessage?.sender?.name?.split(" ")[0]} :{" "}
+                            <i>{chat.lastMessageContent}</i>
                           </Text>
-                          {chat?.lastMessage && (
-                            <Text fontWeight={"600"} fontSize={"xs"}>
-                              {chat?.lastMessage?.sender?.name?.split(" ")[0]} :{" "}
-                              <i>{chat.lastMessageContent}</i>
-                            </Text>
-                          )}
-                        </Box>
+                        )}
                       </Box>
                     </Box>
-                  );
-                })}
-              </Stack>
-            </>
-          ) : (
-            <h1>no chats</h1>
-          )}
-        </Box>
-  
+                  </Box>
+                );
+              })}
+            </Stack>
+          </>
+        ) : (
+          <Text>no chats</Text>
+        )}
+      </Box>
     </Box>
   );
 };
