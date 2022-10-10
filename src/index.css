@@ -11,3 +11,21 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+.d1{
+  animation: type 500ms alternate infinite linear 
+}
+.d2{
+  animation: type 500ms alternate infinite linear 500ms
+}
+.d3{
+  animation: type 500ms alternate infinite linear 1000ms
+}
+ @keyframes type {
+  0% {
+    background-color: rgba(0, 0, 0, 0.42);
+  }
+  100%{
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  
+ }

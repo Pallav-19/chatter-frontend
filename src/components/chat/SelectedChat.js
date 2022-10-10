@@ -2,11 +2,9 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import ChatContext from "../contexts/chats/ChatContext";
-import ScrollableFeed from "react-scrollable-feed";
 import { Avatar, Tooltip } from "@chakra-ui/react";
 import io from "socket.io-client";
-import Lottie from "lottie-react";
-import typingLottie from "../../Animations/typing.json";
+import "../../index.css";
 import {
   Box,
   Button,
@@ -25,9 +23,17 @@ import { useColorMode } from "@chakra-ui/react";
 import CreateGroupModal from "../miscellaneous/CreateGroupModal";
 let socket, compareChat;
 const SelectedChat = () => {
+  const endref = React.useRef(null);
   const toast = useToast();
   const { colorMode } = useColorMode();
-  const { selectedChat, setSelectedChat, user } = React.useContext(ChatContext);
+  const {
+    selectedChat,
+    setSelectedChat,
+    user,
+    notifications,
+    setNotifications,
+    setChats,
+  } = React.useContext(ChatContext);
   const [messages, setMessages] = React.useState([]);
   const [newMessage, setNewMessage] = React.useState("");
   const [loading, setLoading] = React.useState(false);
@@ -35,6 +41,7 @@ const SelectedChat = () => {
   const [typing, setTyping] = React.useState(false);
   const [isTyping, setIsTyping] = React.useState(false);
   const [typer, setTyper] = React.useState("");
+
   const getSender = (user, users) => {
     return users[0]._id === user.userId ? users[1].name : users[0].name;
   };
@@ -46,13 +53,13 @@ const SelectedChat = () => {
     if (!socketState && newMessage?.length < 0) return;
     if (!typing) {
       setTyping(true);
-      socket.emit("typing", selectedChat._id);
+      socket.emit("typing", selectedChat._id, user.name);
     }
     let lastTyping = new Date().getTime();
     let timeout = 2000;
     setTimeout(() => {
       if (new Date().getTime() - lastTyping >= timeout && typing) {
-        socket.emit("stop typing", selectedChat._id);
+        socket.emit("stop typing", selectedChat._id, user.name);
         setTyping(false);
       }
     }, timeout);
@@ -64,17 +71,19 @@ const SelectedChat = () => {
       setSocketState(true);
     });
     socket.emit("setup", user);
-    socket.on("typing", () => {
+    socket.on("typing", (user) => {
       setIsTyping(true);
+      setTyper(user);
     });
     socket.on("stop typing", () => {
       setIsTyping(false);
+      setTyper(user);
     });
   }, []);
   const send = async () => {
     if (!newMessage) return;
     setNewMessage("");
-    socket.emit("stop typing", selectedChat._id);
+    socket.emit("stop typing", selectedChat._id, user.name);
     const { data } = await axios.post(
       "/api/message/createMessage",
       {
@@ -132,6 +141,12 @@ const SelectedChat = () => {
     setLoading(false);
     socket.emit("join chat", selectedChat._id);
   };
+  // console.log(notifications, "-------------");
+  React.useEffect(() => {
+    endref.current?.scrollIntoView();
+    socket.emit("update chats", user.userId);
+    // setNotifications(localStorage.getItem("notifications"));
+  }, [messages, typer, isTyping, notifications]);
   React.useEffect(() => {
     getMessages();
     compareChat = selectedChat;
@@ -139,9 +154,20 @@ const SelectedChat = () => {
   React.useEffect(() => {
     socket.on("message received", (newMessage) => {
       if (!compareChat || compareChat._id !== newMessage.chat._id) {
+        if (
+          !notifications.some((elem) => {
+            return JSON.stringify(newMessage) === JSON.stringify(elem);
+          })
+        ) {
+          setNotifications([newMessage, ...notifications]);
+          // localStorage.setItem("notifications", [newMessage, ...notifications]);
+        }
       } else {
         setMessages([...messages, newMessage]);
       }
+    });
+    socket.on("chats updated", (chats) => {
+      setChats(chats);
     });
   });
   return (
@@ -248,11 +274,11 @@ const SelectedChat = () => {
                     <Box
                       width={"50%"}
                       textAlign={"center"}
-                      bg={"teal"}
+                      bg={"green.100"}
                       padding={1}
                       fontFamily={"ubuntu,sans"}
                       borderRadius={"lg"}
-                      color={"whiteAlpha.900"}
+                      color={"blackAlpha.700"}
                       fontSize={"xs"}
                       // justifySelf={"flex-start"}
                     >
@@ -269,82 +295,218 @@ const SelectedChat = () => {
                       display={"flex"}
                       justifyContent={"flex-end"}
                     >
-                      <ScrollableFeed forceScroll={!newMessage}>
+                      <Box overflowY={"scroll"}>
                         {messages.map((m, i) => {
                           return (
-                            <Box
-                              flexDirection={"row"}
-                              alignItems={"center"}
-                              justifyContent={
-                                m.sender._id === user.userId
-                                  ? "flex-end"
-                                  : "flex-start"
-                              }
-                              width={"100%"}
-                              padding={1}
-                              display={"flex"}
-                            >
-                              <Tooltip
-                                hasArrow
-                                position={"bottom-start"}
-                                cursor="pointer"
-                                label={m.sender.name}
+                            <>
+                              <Box
+                                mb={1}
+                                width={"100%"}
+                                display={
+                                  Number(
+                                    new Date(
+                                      messages[i - 1]?.createdAt
+                                    ).getDate()
+                                  ) !== Number(new Date(m.createdAt).getDate())
+                                    ? "flex"
+                                    : "none"
+                                }
+                                flexDir={"row"}
+                                alignItems={"center"}
+                                justifyContent={"space-between"}
                               >
-                                <Avatar
-                                  visibility={
-                                    messages[i + 1]?.sender?._id ===
-                                      m?.sender?._id ||
-                                    m?.sender?._id === user.userId
-                                      ? "hidden"
-                                      : ""
+                                <Box
+                                  height={"1px"}
+                                  bg={"blackAlpha.500"}
+                                  width={"25vw"}
+                                ></Box>
+                                <Text
+                                  borderRadius={"lg"}
+                                  padding={1.5}
+                                  fontWeight={500}
+                                  fontSize={"xs"}
+                                >
+                                  {new Date(m.createdAt)
+                                    .toString()
+                                    .slice(4, 15)}
+                                </Text>
+                                <Box
+                                  height={"1px"}
+                                  bg={"blackAlpha.500"}
+                                  width={"25vw"}
+                                ></Box>
+                              </Box>
+                              <Box
+                                width={"100%"}
+                                display={
+                                  Number(
+                                    new Date(
+                                      messages[i - 1]?.createdAt
+                                    ).getMinutes()
+                                  ) !==
+                                    Number(
+                                      new Date(m.createdAt).getMinutes()
+                                    ) ||
+                                  messages[i - 1]?.sender._id !== m.sender._id
+                                    ? "flex"
+                                    : "none"
+                                }
+                                flexDirection={"row"}
+                                alignItems={"center"}
+                                justifyContent={
+                                  m.sender._id === user.userId
+                                    ? "flex-end"
+                                    : "flex-start"
+                                }
+                              >
+                                {" "}
+                                <Tooltip
+                                  hasArrow
+                                  position={"bottom-start"}
+                                  cursor="pointer"
+                                  label={m.sender.name}
+                                >
+                                  <Avatar
+                                    visibility={"hidden"}
+                                    size={"xs"}
+                                    name={m.sender.name}
+                                    mt={2}
+                                    mr={1.5}
+                                  />
+                                </Tooltip>
+                                <Text
+                                  fontSize={"xs"}
+                                  padding={1.5}
+                                  pb={0}
+                                  pt={0}
+                                >
+                                  {new Date(m.createdAt).getHours().toString()}:
+                                  {new Date(m.createdAt)
+                                    .getMinutes()
+                                    .toString()}
+                                </Text>
+                              </Box>
+                              <Box
+                                flexDirection={"row"}
+                                alignItems={"center"}
+                                justifyContent={
+                                  m.sender._id === user.userId
+                                    ? "flex-end"
+                                    : "flex-start"
+                                }
+                                width={"100%"}
+                                padding={1}
+                                pb={0.5}
+                                pt={0.5}
+                                display={"flex"}
+                              >
+                                <Tooltip
+                                  hasArrow
+                                  position={"bottom-start"}
+                                  cursor="pointer"
+                                  label={m.sender.name}
+                                >
+                                  <Avatar
+                                    visibility={
+                                      messages[i + 1]?.sender?._id ===
+                                        m?.sender?._id ||
+                                      m?.sender?._id === user.userId
+                                        ? "hidden"
+                                        : ""
+                                    }
+                                    size={"xs"}
+                                    name={m.sender.name}
+                                    mt={2}
+                                    mr={1.5}
+                                  />
+                                </Tooltip>
+                                <Text
+                                  padding={2}
+                                  fontStyle={"ubuntu,sans"}
+                                  fontSize={"sm"}
+                                  color={
+                                    m.sender._id === user.userId
+                                      ? "white"
+                                      : "blackAlpha.800"
                                   }
-                                  size={"xs"}
-                                  name={m.sender.name}
-                                  mt={2}
-                                  mr={1.5}
-                                />
-                              </Tooltip>
-                              <Text
-                                padding={1.5}
-                                fontStyle={"ubuntu,sans"}
-                                fontSize={"sm"}
-                                color={
-                                  m.sender._id === user.userId
-                                    ? "white"
-                                    : "blackAlpha.800"
-                                }
-                                borderRadius={"lg"}
-                                maxWidth={"50vw"}
-                                bg={
-                                  m.sender._id === user.userId
-                                    ? "blue.500"
-                                    : "blue.100"
-                                }
-                              >
-                                {m.content}
-                              </Text>
-                            </Box>
+                                  borderRadius={"lg"}
+                                  maxWidth={"50vw"}
+                                  minWidth={"5vw"}
+                                  bg={
+                                    m.sender._id === user.userId
+                                      ? "blue.500"
+                                      : "blue.100"
+                                  }
+                                >
+                                  {m.content}
+                                </Text>
+                              </Box>
+                            </>
                           );
                         })}
-                      </ScrollableFeed>
+                        <>
+                          {" "}
+                          {isTyping ? (
+                            <Box
+                              bg={"transparent"}
+                              flexDirection={"row"}
+                              alignItems={"center"}
+                              justifyContent={"flex-start"}
+                              width={"100%"}
+                              padding={4}
+                              pb={0}
+                              display={"flex"}
+                            >
+                              <Avatar name={typer} size={"xs"} />
+                              <Box
+                                borderRadius={"lg"}
+                                ml={1.5}
+                                display={"flex"}
+                                alignItems={"center"}
+                                justifyContent={"space-evenly"}
+                                padding={4}
+                                bg={"blue.100"}
+                                minWidth={"12%"}
+                              >
+                                <div
+                                  className="d1"
+                                  style={{
+                                    backgroundColor: "#00000030",
+                                    height: "10px",
+                                    width: "10px",
+                                    borderRadius: "50%",
+                                    marginLeft: "2px",
+                                  }}
+                                ></div>
+                                <div
+                                  className="d2"
+                                  style={{
+                                    backgroundColor: "#00000050",
+                                    height: "10px",
+                                    width: "10px",
+                                    borderRadius: "50%",
+                                    marginLeft: "2px",
+                                  }}
+                                ></div>
+                                <div
+                                  className="d3"
+                                  style={{
+                                    backgroundColor: "#00000070",
+                                    height: "10px",
+                                    width: "10px",
+                                    borderRadius: "50%",
+                                    marginLeft: "2px",
+                                  }}
+                                ></div>
+                              </Box>
+                            </Box>
+                          ) : (
+                            <></>
+                          )}{" "}
+                        </>
+                        <Box ref={endref}></Box>
+                      </Box>
                     </Box>
-                  )}
-                  {isTyping ? (
-                    <Box
-                      // visibility={typer !== user ? "visible" : "hidden"}
-                      bg={"transparent"}
-                      flexDirection={"row"}
-                      alignItems={"center"}
-                      justifyContent={"flex-start"}
-                      width={"100%"}
-                      padding={4}
-                      pb={0}
-                      display={"flex"}
-                    >
-                      <Avatar size={"sm"} />
-                    </Box>
-                  ) : (
-                    <></>
                   )}
                 </Box>
               ) : (
@@ -354,6 +516,7 @@ const SelectedChat = () => {
                   h={20}
                   alignSelf={"center"}
                   margin={"auto"}
+                  color={"blue.400"}
                 ></Spinner>
               )}
               <Box
@@ -390,7 +553,7 @@ const SelectedChat = () => {
                     send();
                   }}
                   type="submit"
-                  colorScheme={"pink"}
+                  colorScheme={"teal"}
                   borderRadius={"lg"}
                 >
                   <i class="fa-solid fa-arrow-right"></i>

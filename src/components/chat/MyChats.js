@@ -16,7 +16,6 @@ import ChatContext from "../contexts/chats/ChatContext";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import CreateGroupModal from "../miscellaneous/CreateGroupModal";
-
 const MyChats = () => {
   const [loading, setLoading] = React.useState(false);
   const { selectedChat, setSelectedChat, chats, setChats } =
@@ -93,7 +92,7 @@ const MyChats = () => {
           </Button>
         </CreateGroupModal>
       </Box>
-      {!loading ? (
+   
         <Box
           display={"flex"}
           flexDir={"column"}
@@ -110,6 +109,7 @@ const MyChats = () => {
                 {chats.map((chat) => {
                   return (
                     <Box
+                      height={"100%"}
                       onClick={() => {
                         setSelectedChat(chat);
                       }}
@@ -121,7 +121,11 @@ const MyChats = () => {
                       borderRadius={"lg"}
                       key={chat._id}
                     >
-                      <Text display={"flex"} alignItems={"center"}>
+                      <Box
+                        height={"100%"}
+                        display={"flex"}
+                        alignItems={"center"}
+                      >
                         <Avatar
                           mr={3}
                           name={
@@ -131,10 +135,25 @@ const MyChats = () => {
                           }
                           size={"sm"}
                         />
-                        {!chat?.isGroup
-                          ? getSender(user, chat.users)
-                          : chat.name}
-                      </Text>
+                        <Box
+                          display={"flex"}
+                          flexDirection={"column"}
+                          alignItems={"flex-start"}
+                          justifyContent={"space-between"}
+                        >
+                          <Text>
+                            {!chat?.isGroup
+                              ? getSender(user, chat.users)
+                              : chat.name}
+                          </Text>
+                          {chat?.lastMessage && (
+                            <Text fontWeight={"600"} fontSize={"xs"}>
+                              {chat?.lastMessage?.sender?.name?.split(" ")[0]} :{" "}
+                              <i>{chat.lastMessageContent}</i>
+                            </Text>
+                          )}
+                        </Box>
+                      </Box>
                     </Box>
                   );
                 })}
@@ -144,28 +163,7 @@ const MyChats = () => {
             <h1>no chats</h1>
           )}
         </Box>
-      ) : (
-        <Box
-          display={"flex"}
-          flexDir={"column"}
-          p={3}
-          bg="#f8f8f8"
-          width={"100%"}
-          height={"100%"}
-          overflowY={"hidden"}
-          borderRadius={"lg"}
-          justifyContent={"center"}
-          alignItems={"center"}
-        >
-          <Spinner
-            thickness="4px"
-            speed="0.65s"
-            emptyColor="gray.200"
-            color="blue.500"
-            size="xl"
-          />{" "}
-        </Box>
-      )}
+  
     </Box>
   );
 };

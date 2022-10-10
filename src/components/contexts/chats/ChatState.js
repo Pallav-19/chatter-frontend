@@ -10,6 +10,7 @@ const ChatState = ({ children }) => {
   const [selectedChat, setSelectedChat] = React.useState();
   const [chats, setChats] = React.useState([]);
   const [chatID, setChatID] = React.useState([]);
+  const [notifications, setNotifications] = React.useState([]);
   let [fetchAgain, setFetchAgain] = React.useState(0);
   const location = useLocation();
   const [LoggedIn, setLoggedIn] = React.useState(false);
@@ -28,6 +29,8 @@ const ChatState = ({ children }) => {
     <ChatContext.Provider
       value={{
         selectedChat,
+        notifications,
+        setNotifications,
         setSelectedChat,
         chats,
         setChats,

@@ -3,7 +3,6 @@
 import React from "react";
 import ChatContext from "../contexts/chats/ChatContext";
 import { Avatar, Box, Text } from "@chakra-ui/react";
-import SelectedChat from "../chat/SelectedChat";
 const UserList = ({ user, handleClick, isEditing }) => {
   const { selectedChat } = React.useContext(ChatContext);
   return (

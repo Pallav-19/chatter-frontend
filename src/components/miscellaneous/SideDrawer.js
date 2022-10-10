@@ -23,7 +23,9 @@ import {
   Input,
   Box,
   useToast,
+  Badge,
 } from "@chakra-ui/react";
+
 import { BellIcon, ChevronDownIcon, SunIcon, MoonIcon } from "@chakra-ui/icons";
 import ChatContext from "../contexts/chats/ChatContext";
 import ProfileModal from "./ProfileModal.js";
@@ -34,6 +36,8 @@ const SideDrawer = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   let {
     selectedChat,
+    notifications,
+    setNotifications,
     setSelectedChat,
     chats,
     setChats,
@@ -96,7 +100,9 @@ const SideDrawer = () => {
     }
     setLoad(false);
   };
-
+  const getSender = (user, users) => {
+    return users[0]?._id === user.userId ? users[1]?.name : users[0]?.name;
+  };
   const accessChat = async (selectedUserId) => {
     console.log(user.userId);
     console.log(selectedUserId);
@@ -168,8 +174,42 @@ const SideDrawer = () => {
         <Menu>
           <MenuButton size={{ base: "sm", md: "md" }} mx={"2"} as={Button}>
             <BellIcon fontSize={"2xl"} margin="1"></BellIcon>
+            <Badge
+              hidden={!notifications.length}
+              height={6}
+              width={6}
+              borderRadius={"50%"}
+              colorScheme={"green"}
+              padding={1}
+            >
+              {notifications.length}
+            </Badge>
           </MenuButton>
-          {/* <MenuList></MenuList> */}
+          <MenuList>
+            {notifications?.length < 1 ? (
+              <MenuItem>No new mesages!</MenuItem>
+            ) : (
+              notifications?.map((n) => {
+                console.log("map");
+                return (
+                  <MenuItem
+                    onClick={() => {
+                      setSelectedChat(n.chat);
+                      setNotifications(
+                        notifications.filter((notification) => {
+                          return n !== notification;
+                        })
+                      );
+                    }}
+                  >
+                    {n.chat.isGroup
+                      ? `New message in ${n.chat.name}`
+                      : `${getSender(user, n.chat.users)} sent a message`}
+                  </MenuItem>
+                );
+              })
+            )}
+          </MenuList>
         </Menu>
         <Menu>
           <MenuButton
