@@ -65,7 +65,7 @@ const SelectedChat = () => {
     }, timeout);
   };
   React.useEffect(() => {
-    socket = io("http://localhost:5000");
+    socket = io("https://chatter-nfu0.onrender.com");
 
     socket.on("connected", () => {
       setSocketState(true);
@@ -94,6 +94,7 @@ const SelectedChat = () => {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
+          "Access-Control-Allow-Origin": "*",
           authorisation: localStorage.getItem("Auth"),
         },
       }
@@ -123,6 +124,7 @@ const SelectedChat = () => {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
+          "Access-Control-Allow-Origin": "*",
           authorisation: localStorage.getItem("Auth"),
         },
       }

@@ -94,11 +94,12 @@ const Login = () => {
 
     if (errorCount === 0) {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/login ",
+        "/api/auth/login ",
         { email, password },
         {
           headers: {
             "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
             Accept: "application/json",
           },
         }
@@ -131,6 +132,7 @@ const Login = () => {
         {
           headers: {
             "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
             Accept: "application/json",
           },
         }

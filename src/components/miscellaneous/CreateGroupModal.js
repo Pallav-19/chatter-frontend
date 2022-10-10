@@ -55,6 +55,7 @@ const CreateGroupModal = ({ children, isEditing }) => {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
+          "Access-Control-Allow-Origin": "*",
           authorisation: localStorage.getItem("Auth"),
         },
       });
@@ -124,6 +125,7 @@ const CreateGroupModal = ({ children, isEditing }) => {
             headers: {
               authorisation: localStorage.getItem("Auth"),
               "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
               Accept: "application/json",
             },
           }
@@ -170,6 +172,7 @@ const CreateGroupModal = ({ children, isEditing }) => {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
+            "Access-Control-Allow-Origin": "*",
             authorisation: localStorage.getItem("Auth"),
           },
         }

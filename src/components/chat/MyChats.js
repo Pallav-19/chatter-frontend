@@ -29,6 +29,7 @@ const MyChats = () => {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
+          "Access-Control-Allow-Origin": "*",
           authorisation: localStorage.getItem("Auth"),
         },
       });

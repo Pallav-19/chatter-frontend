@@ -150,6 +150,7 @@ const Signup = () => {
         {
           headers: {
             "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
             Accept: "application/json",
           },
         }
@@ -178,6 +179,7 @@ const Signup = () => {
         {
           headers: {
             "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
             Accept: "application/json",
           },
         }
@@ -217,6 +219,7 @@ const Signup = () => {
         {
           headers: {
             "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
             Accept: "application/json",
           },
         }
