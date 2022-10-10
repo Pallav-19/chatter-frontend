@@ -21,6 +21,7 @@ import {
   PinInput,
   PinInputField,
   InputLeftAddon,
+  InputRightAddon,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
@@ -28,6 +29,7 @@ import axios from "axios";
 import validator from "validator";
 import { useNavigate } from "react-router-dom";
 const Signup = () => {
+  const [length, setLength] = React.useState(15);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [inputOTP, setInputOTP] = React.useState();
   const [outputOTP, setOutputOTP] = React.useState();
@@ -299,10 +301,12 @@ const Signup = () => {
               isRequired
               value={name}
               onChange={(e) => {
-                setName(e.target.value);
+                setName(e.target.value.slice(0, 15));
+                setLength(15 - e.target.value.slice(0, 15).length);
               }}
               type="text"
             />
+            <InputRightAddon children={length}></InputRightAddon>
           </InputGroup>
 
           <InputGroup mb={6}>
