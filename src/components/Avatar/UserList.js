@@ -32,7 +32,7 @@ const UserList = ({ user, handleClick, isEditing }) => {
           <Text>{user.name}</Text>
           <Text fontSize={"xs"}>
             <b>Email : </b>
-            {user.email}
+            {user.email.slice(0,12)}...
           </Text>
         </Box>
       </Box>

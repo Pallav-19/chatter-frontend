@@ -34,7 +34,7 @@ const Home = () => {
           transform={"translate(-50%,-50%)"}
           borderRadius={"lg"}
           boxShadow={"1px 1px 2px rgba(0, 0, 0, 0.444)"}
-          height={{ base: "65%", md: "90%" }}
+          height={{ base: "90%", md: "90%" }}
         >
           <TabList>
             <Tab fontFamily={"ubuntu,sans"} fontSize={"xl"} width={"50%"}>

@@ -39,7 +39,7 @@ const GroupInfoModal = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [groupChatName, setGroupChatName] = React.useState("");
   const [length, setLength] = React.useState(selectedChat.name.length);
-
+  const [removeLoading, setRemoveloading] = React.useState(false);
   const [renameLoading, setRenameLoading] = React.useState(false);
   const toast = useToast();
 
@@ -55,6 +55,7 @@ const GroupInfoModal = ({ children }) => {
       });
       return;
     }
+    setRemoveloading(true);
     const { data } = await axios.put(
       "https://chatter-nfu0.onrender.com/api/chat/removeFromGroup",
       {
@@ -78,6 +79,7 @@ const GroupInfoModal = ({ children }) => {
       status: (await data.success) ? "success" : "error",
       position: "top-left",
     });
+    setRemoveloading(false);
     navigate("/");
     if (await data.success) setSelectedChat(await data.result);
   };
@@ -292,12 +294,9 @@ const GroupInfoModal = ({ children }) => {
               Done
             </Button>
             <Button
-              isLoading={leaveLoading}
-              loadingText="Leaving Group"
+              isLoading={removeLoading}
               onClick={() => {
-                setLeaveLoading(true);
                 handleRemove(user.userId);
-                setLeaveLoading(false);
               }}
               colorScheme="red"
               mr={3}

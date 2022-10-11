@@ -77,14 +77,17 @@ const SideDrawer = () => {
       setLoading(true);
       setText(" ");
 
-      const { data } = await axios.get(`https://chatter-nfu0.onrender.com/api/user/allUsers?search=${search}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "Access-Control-Allow-Origin": "*",
-          authorisation: localStorage.getItem("Auth"),
-        },
-      });
+      const { data } = await axios.get(
+        `https://chatter-nfu0.onrender.com/api/user/allUsers?search=${search}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "Access-Control-Allow-Origin": "*",
+            authorisation: localStorage.getItem("Auth"),
+          },
+        }
+      );
       if (data.success && data.users.length > 0) {
         setText(" ");
         setSearchResults(await data.users);
@@ -289,11 +292,12 @@ const SideDrawer = () => {
               {!loading ? (
                 search?.length > 0 ? (
                   <Box
-                    padding={5}
+                    padding={{ base: "2", md: "4" }}
                     display={"flex"}
                     flexDir={"column"}
                     width={"100%"}
                     height={"100%"}
+                    overflowY={"hidden"}
                     // maxHeight={"40vh"}
                   >
                     {searchResults?.map((user) => {

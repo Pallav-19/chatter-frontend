@@ -383,9 +383,9 @@ const SelectedChat = () => {
                                   pt={0}
                                 >
                                   {new Date(m.createdAt).getHours().toString()}:
-                                  {new Date(m.createdAt)
+                                  {` 0${new Date(m.createdAt)
                                     .getMinutes()
-                                    .toString()}
+                                    .toString()}`.slice(-2)}
                                 </Text>
                               </Box>
                               <Box

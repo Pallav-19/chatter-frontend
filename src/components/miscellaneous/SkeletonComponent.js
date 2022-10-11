@@ -4,19 +4,31 @@ import { Skeleton, Stack } from "@chakra-ui/react";
 const SkeletonComponent = () => {
   return (
     <div>
-      <Stack mt={"4"}>
-        <Skeleton height="1.25rem" />
-        <Skeleton height="1.25rem" />
-        <Skeleton height="1.25rem" />
-        <Skeleton height="1.25rem" />
-        <Skeleton height="1.25rem" />
-        <Skeleton height="1.25rem" />
-        <Skeleton height="1.25rem" />
-        <Skeleton height="1.25rem" />
-        <Skeleton height="1.25rem" />
-        <Skeleton height="1.25rem" />
-        <Skeleton height="1.25rem" />
-        <Skeleton height="1.25rem" />
+      <Stack overflowY={"hidden"} mt={"4"}>
+        <Skeleton height="2.5rem" />
+        <Skeleton height="2.5rem" />
+        <Skeleton height="2.5rem" />
+        <Skeleton height="2.5rem" />
+        <Skeleton height="2.5rem" />
+        <Skeleton height="2.5rem" />
+        <Skeleton height="2.5rem" />
+        <Skeleton height="2.5rem" />
+        <Skeleton height="2.5rem" />
+        <Skeleton height="2.5rem" />
+        <Skeleton height="2.5rem" />
+        <Skeleton height="2.5rem" />
+        <Skeleton height="2.5rem" />
+        <Skeleton height="2.5rem" />
+        <Skeleton height="2.5rem" />
+        <Skeleton height="2.5rem" />
+        <Skeleton height="2.5rem" />
+        <Skeleton height="2.5rem" />
+        <Skeleton height="2.5rem" />
+        <Skeleton height="2.5rem" />
+        <Skeleton height="2.5rem" />
+        <Skeleton height="2.5rem" />
+        <Skeleton height="2.5rem" />
+        <Skeleton height="2.5rem" />
       </Stack>
     </div>
   );
