@@ -144,7 +144,7 @@ const Signup = () => {
     if (errorCount === 0) {
       setLoading(true);
       const { data } = await axios.post(
-        "https://chatter-nfu0.onrender.com/api/auth/sendOTP/verification",
+        "http://35.154.71.7/api/auth/sendOTP/verification",
         {
           emailOTP: email,
           name,
@@ -177,7 +177,7 @@ const Signup = () => {
     if (inputOTP.length === 3) {
       if (inputOTP == outputOTP) {
         const response = await axios.post(
-          "https://chatter-nfu0.onrender.com/api/auth/signup",
+          "http://35.154.71.7/api/auth/signup",
           { name, email, password },
           {
             headers: {
@@ -231,7 +231,7 @@ const Signup = () => {
     if (inputOTP.length === 3) {
       if (inputOTP == outputOTP) {
         const response = await axios.post(
-          "https://chatter-nfu0.onrender.com/api/auth/signup",
+          "http://35.154.71.7/api/auth/signup",
           { name, email, password },
           {
             headers: {

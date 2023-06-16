@@ -65,7 +65,7 @@ const SelectedChat = () => {
     }, timeout);
   };
   React.useEffect(() => {
-    socket = io("https://chatter-nfu0.onrender.com");
+    socket = io("http://35.154.71.7");
 
     socket.on("connected", () => {
       setSocketState(true);
@@ -85,7 +85,7 @@ const SelectedChat = () => {
     setNewMessage("");
     socket.emit("stop typing", selectedChat._id, user.name);
     const { data } = await axios.post(
-      "https://chatter-nfu0.onrender.com/api/message/createMessage",
+      "http://35.154.71.7/api/message/createMessage",
       {
         chatId: selectedChat._id,
         content: newMessage,
@@ -118,7 +118,7 @@ const SelectedChat = () => {
     }
     setLoading(true);
     const { data } = await axios.get(
-      `https://chatter-nfu0.onrender.com/api/message/getMessages/${selectedChat._id}`,
+      `http://35.154.71.7/api/message/getMessages/${selectedChat._id}`,
 
       {
         headers: {

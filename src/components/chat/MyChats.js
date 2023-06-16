@@ -27,7 +27,7 @@ const MyChats = () => {
     try {
       setLoading(true);
       const { data } = await axios.get(
-        "https://chatter-nfu0.onrender.com/api/chat/getChats",
+        "http://35.154.71.7/api/chat/getChats",
         {
           headers: {
             "Content-Type": "application/json",

@@ -51,7 +51,7 @@ const CreateGroupModal = ({ children, isEditing }) => {
       setLoading(true);
       setText(" ");
 
-      const { data } = await axios.get(`https://chatter-nfu0.onrender.com/api/user/allUsers?search=${search}`, {
+      const { data } = await axios.get(`http://35.154.71.7/api/user/allUsers?search=${search}`, {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
@@ -116,7 +116,7 @@ const CreateGroupModal = ({ children, isEditing }) => {
     if (groupName && selectedUsers.length >= 2) {
       try {
         const { data } = await axios.post(
-          "https://chatter-nfu0.onrender.com/api/chat/createGroup",
+          "http://35.154.71.7/api/chat/createGroup",
           {
             name: groupName,
             users: selectedUsers?.map((u) => u._id),
@@ -163,7 +163,7 @@ const CreateGroupModal = ({ children, isEditing }) => {
     setCreateLoading(true);
     try {
       const { data } = await axios.put(
-        "https://chatter-nfu0.onrender.com/api/chat/addToGroup",
+        "http://35.154.71.7/api/chat/addToGroup",
         {
           chatId: selectedChat._id,
           users: selectedUsers?.map((u) => u._id),
