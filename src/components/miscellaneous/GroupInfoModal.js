@@ -67,7 +67,7 @@ const GroupInfoModal = ({ children }) => {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          "Access-Control-Allow-Origin": "*",
+           
           authorisation: localStorage.getItem("Auth"),
         },
       }
@@ -96,7 +96,7 @@ const GroupInfoModal = ({ children }) => {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
-            "Access-Control-Allow-Origin": "*",
+             
             authorisation: localStorage.getItem("Auth"),
           },
         }

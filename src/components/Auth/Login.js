@@ -99,7 +99,7 @@ const Login = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
+             
             Accept: "application/json",
           },
         }
@@ -132,7 +132,7 @@ const Login = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
+             
             Accept: "application/json",
           },
         }
