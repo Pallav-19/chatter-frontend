@@ -57,7 +57,7 @@ const GroupInfoModal = ({ children }) => {
     }
     setRemoveloading(true);
     const { data } = await axios.put(
-      "http://35.154.71.7/api/chat/removeFromGroup",
+      "http://localhost:5000/api/chat/removeFromGroup",
       {
         chatId: selectedChat._id,
         userId,
@@ -87,7 +87,7 @@ const GroupInfoModal = ({ children }) => {
     setRenameLoading(true);
     if (groupChatName) {
       const { data } = await axios.put(
-        "http://35.154.71.7/api/chat/renameGroup",
+        "http://localhost:5000/api/chat/renameGroup",
         {
           chatId: selectedChat._id,
           chatName: groupChatName,

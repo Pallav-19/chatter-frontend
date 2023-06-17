@@ -27,12 +27,12 @@ const MyChats = () => {
     try {
       setLoading(true);
       const { data } = await axios.get(
-        "http://35.154.71.7/api/chat/getChats",
+        "http://localhost:5000/api/chat/getChats",
         {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
-             
+
             authorisation: localStorage.getItem("Auth"),
           },
         }
@@ -41,7 +41,7 @@ const MyChats = () => {
         //console.log(await data);
         setChats(await data);
       }
-      setLoading(false);
+
     } catch (err) {
       toast({
         title: err.message,
@@ -50,7 +50,10 @@ const MyChats = () => {
         isClosable: true,
         position: "top-left",
       });
-      setLoading(false);
+
+    }
+    finally {
+      setLoading(false)
     }
   };
   const getSender = (user, users) => {

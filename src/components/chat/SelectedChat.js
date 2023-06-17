@@ -65,7 +65,7 @@ const SelectedChat = () => {
     }, timeout);
   };
   React.useEffect(() => {
-    socket = io("http://35.154.71.7");
+    socket = io("http://localhost:5000");
 
     socket.on("connected", () => {
       setSocketState(true);
@@ -85,7 +85,7 @@ const SelectedChat = () => {
     setNewMessage("");
     socket.emit("stop typing", selectedChat._id, user.name);
     const { data } = await axios.post(
-      "http://35.154.71.7/api/message/createMessage",
+      "http://localhost:5000/api/message/createMessage",
       {
         chatId: selectedChat._id,
         content: newMessage,
@@ -118,7 +118,7 @@ const SelectedChat = () => {
     }
     setLoading(true);
     const { data } = await axios.get(
-      `http://35.154.71.7/api/message/getMessages/${selectedChat._id}`,
+      `http://localhost:5000/api/message/getMessages/${selectedChat._id}`,
 
       {
         headers: {
