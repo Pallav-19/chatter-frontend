@@ -65,7 +65,7 @@ const SelectedChat = () => {
     }, timeout);
   };
   React.useEffect(() => {
-    socket = io("http://localhost:5000");
+    socket = io("https://chatter-backend-nine.vercel.app");
 
     socket.on("connected", () => {
       setSocketState(true);
@@ -85,7 +85,7 @@ const SelectedChat = () => {
     setNewMessage("");
     socket.emit("stop typing", selectedChat._id, user.name);
     const { data } = await axios.post(
-      "http://localhost:5000/api/message/createMessage",
+      "https://chatter-backend-nine.vercel.app/api/message/createMessage",
       {
         chatId: selectedChat._id,
         content: newMessage,
@@ -118,7 +118,7 @@ const SelectedChat = () => {
     }
     setLoading(true);
     const { data } = await axios.get(
-      `http://localhost:5000/api/message/getMessages/${selectedChat._id}`,
+      `https://chatter-backend-nine.vercel.app/api/message/getMessages/${selectedChat._id}`,
 
       {
         headers: {

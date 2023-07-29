@@ -57,7 +57,7 @@ const GroupInfoModal = ({ children }) => {
     }
     setRemoveloading(true);
     const { data } = await axios.put(
-      "http://localhost:5000/api/chat/removeFromGroup",
+      "https://chatter-backend-nine.vercel.app/api/chat/removeFromGroup",
       {
         chatId: selectedChat._id,
         userId,
@@ -87,7 +87,7 @@ const GroupInfoModal = ({ children }) => {
     setRenameLoading(true);
     if (groupChatName) {
       const { data } = await axios.put(
-        "http://localhost:5000/api/chat/renameGroup",
+        "https://chatter-backend-nine.vercel.app/api/chat/renameGroup",
         {
           chatId: selectedChat._id,
           chatName: groupChatName,

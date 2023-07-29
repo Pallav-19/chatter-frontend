@@ -144,7 +144,7 @@ const Signup = () => {
     if (errorCount === 0) {
       setLoading(true);
       const { data } = await axios.post(
-        "http://localhost:5000/api/auth/sendOTP/verification",
+        "https://chatter-backend-nine.vercel.app/api/auth/sendOTP/verification",
         {
           emailOTP: email,
           name,
@@ -177,7 +177,7 @@ const Signup = () => {
     if (inputOTP.length === 3) {
       if (inputOTP == outputOTP) {
         const response = await axios.post(
-          "http://localhost:5000/api/auth/signup",
+          "https://chatter-backend-nine.vercel.app/api/auth/signup",
           { name, email, password },
           {
             headers: {
@@ -231,7 +231,7 @@ const Signup = () => {
     if (inputOTP.length === 3) {
       if (inputOTP == outputOTP) {
         const response = await axios.post(
-          "http://localhost:5000/api/auth/signup",
+          "https://chatter-backend-nine.vercel.app/api/auth/signup",
           { name, email, password },
           {
             headers: {

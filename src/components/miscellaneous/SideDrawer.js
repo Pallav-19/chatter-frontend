@@ -78,7 +78,7 @@ const SideDrawer = () => {
       setText(" ");
 
       const { data } = await axios.get(
-        `http://localhost:5000/api/user/allUsers?search=${search}`,
+        `https://chatter-backend-nine.vercel.app/api/user/allUsers?search=${search}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -113,7 +113,7 @@ const SideDrawer = () => {
     try {
       setLoadingChat(true);
       const { data } = await axios.post(
-        `http://localhost:5000/api/chat/accessChat`,
+        `https://chatter-backend-nine.vercel.app/api/chat/accessChat`,
         { userId: selectedUserId },
         {
           headers: {

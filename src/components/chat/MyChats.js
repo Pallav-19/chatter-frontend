@@ -27,7 +27,7 @@ const MyChats = () => {
     try {
       setLoading(true);
       const { data } = await axios.get(
-        "http://localhost:5000/api/chat/getChats",
+        "https://chatter-backend-nine.vercel.app/api/chat/getChats",
         {
           headers: {
             "Content-Type": "application/json",
@@ -158,7 +158,7 @@ const MyChats = () => {
                           {chat?.lastMessage && (
                             <Text fontWeight={"600"} fontSize={"xs"}>
                               {chat?.lastMessage?.sender?.name?.split(" ")[0]} :{" "}
-                              <i>{chat.lastMessageContent}</i>
+                              <i>{chat.lastMessage.content}</i>
                             </Text>
                           )}
                         </Box>

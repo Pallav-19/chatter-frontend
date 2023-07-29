@@ -94,7 +94,7 @@ const Login = () => {
 
     if (errorCount === 0) {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/login ",
+        "https://chatter-backend-nine.vercel.app/api/auth/login ",
         { email, password },
         {
           headers: {
@@ -125,7 +125,7 @@ const Login = () => {
     setOTPLoading(true);
     if (email) {
       const { data } = await axios.post(
-        "http://localhost:5000/api/auth/sendOTP/reset",
+        "https://chatter-backend-nine.vercel.app/api/auth/sendOTP/reset",
         {
           emailOTP: email,
         },
@@ -237,7 +237,7 @@ const Login = () => {
     }
 
     if (errorCount === 0) {
-      const { data } = await axios.put("http://localhost:5000/api/auth/changePassword", {
+      const { data } = await axios.put("https://chatter-backend-nine.vercel.app/api/auth/changePassword", {
         newpassword,
         email,
       });
